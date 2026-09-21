@@ -101,6 +101,7 @@
   }
   .mode-switch {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
     background: var(--surface-sunken);
     border-radius: 999px;
@@ -115,7 +116,14 @@
     padding: 7px 14px;
     border-radius: 999px;
     cursor: pointer;
+    white-space: nowrap;
     transition: background 0.15s ease, color 0.15s ease;
+  }
+  @media (max-width: 460px) {
+    .mode-switch button {
+      font-size: 12px;
+      padding: 6px 10px;
+    }
   }
   .mode-switch button.active {
     background: var(--surface);
@@ -387,6 +395,8 @@
   .total-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 8px;
   }
   .pill-btn {
@@ -404,7 +414,7 @@
     color: var(--accent);
     background: var(--accent-soft);
   }
-  .discount-panel {
+  .custom-item-panel {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -413,51 +423,92 @@
     margin-bottom: 6px;
     border-bottom: 1px dashed var(--border);
   }
-  .discount-type-toggle {
-    display: flex;
-    gap: 3px;
-    background: var(--surface-sunken);
-    border-radius: 8px;
-    padding: 3px;
-    flex: 0 0 auto;
-  }
-  .discount-type-toggle button {
-    border: none;
-    background: transparent;
-    color: var(--ink-soft);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 11px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .discount-type-toggle button.active {
-    background: var(--surface);
-    color: var(--ink);
-    box-shadow: var(--shadow);
-  }
-  .discount-panel input {
+  .custom-item-panel input[type="text"]:not(.price-input-inline) {
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--ink);
     border-radius: var(--radius-s);
     padding: 8px 10px;
     font-size: 14px;
-    width: 90px;
+    flex: 1 1 120px;
+    min-width: 0;
+  }
+  .custom-item-panel .price-field {
     flex: 0 0 auto;
   }
-  .discount-panel input:focus {
+  .custom-item-panel .price-input-inline {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--radius-s);
+    padding: 8px 10px;
+    font-size: 14px;
+    width: 80px;
+  }
+  .custom-item-panel input:focus, .custom-item-panel select:focus {
     outline: 2px solid var(--accent);
     outline-offset: -1px;
   }
-  .discount-remove {
+  .custom-item-panel select {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--radius-s);
+    padding: 8px 8px;
+    font-size: 13px;
+    flex: 0 0 auto;
+    max-width: 140px;
+  }
+  .item-row .custom-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 999px;
+    margin-left: 5px;
+  }
+  .mini-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex: 0 0 auto;
+  }
+  .mini-qty-row .qty-val {
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 1.4em;
+    text-align: center;
+  }
+  .mini-qty-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 0;
+  }
+  .item-row .custom-remove-btn {
     border: none;
     background: none;
     color: var(--danger);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    padding: 6px 4px;
+    padding: 2px 4px;
+    flex: 0 0 auto;
+    line-height: 1;
   }
 
   /* ---------- Manage view + Admin view ---------- */
@@ -611,52 +662,60 @@
     cursor: pointer;
     flex: 0 0 auto;
   }
-  .cat-chip-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .cat-chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 999px;
-    padding: 6px 6px 6px 12px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .cat-chip button {
-    border: none;
-    background: var(--surface-sunken);
-    color: var(--danger);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-  }
   .product-group {
-    margin-bottom: 14px;
+    margin-bottom: 22px;
   }
   .product-group:last-child {
     margin-bottom: 0;
   }
-  .product-group-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink-soft);
+  .product-group-header {
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: var(--radius-m) var(--radius-m) 0 0;
+    background: var(--surface-sunken);
+    padding: 12px 14px;
+  }
+  .product-group-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+  .product-group-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    margin-bottom: 6px;
-    padding-left: 2px;
+  }
+  .product-group-header .inherit-note {
+    display: block;
+    margin-top: 8px;
+  }
+  .category-group-discount {
+    flex: 0 0 auto;
+  }
+  .category-group-discount .price-currency {
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 500;
+  }
+  .field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
   }
   .product-list {
     border: 1px solid var(--border);
-    border-radius: var(--radius-m);
+    border-radius: 0 0 var(--radius-m) var(--radius-m);
     overflow: hidden;
     background: var(--surface);
   }
@@ -664,31 +723,56 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 11px 14px;
+    padding: 13px 14px;
     border-bottom: 1px solid var(--border);
     font-size: 14px;
     flex-wrap: wrap;
   }
   .product-list-row:last-child { border-bottom: none; }
   .product-list-row .pname { font-weight: 600; flex: 1 1 100px; min-width: 90px; }
+  .product-card-row {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .product-card-row:last-child { border-bottom: none; }
+  .product-card-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .product-card-row-top .pname {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .product-card-row-fields {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .product-card-row-result {
+    text-align: right;
+  }
   .price-field {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
     flex: 0 0 auto;
   }
   .price-field .price-currency {
     color: var(--ink-soft);
-    font-size: 13px;
+    font-size: 14px;
   }
   .price-input {
-    width: 68px;
+    width: 76px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--ink);
-    border-radius: 6px;
-    padding: 5px 6px;
-    font-size: 13px;
+    border-radius: 7px;
+    padding: 7px 8px;
+    font-size: 14px;
     text-align: right;
   }
   .price-input:focus {
@@ -698,22 +782,22 @@
   .discount-rate-field {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     flex: 0 0 auto;
   }
   .discount-rate-field .price-currency {
     color: var(--ink-soft);
-    font-size: 12px;
+    font-size: 13px;
     white-space: nowrap;
   }
   .discount-rate-input {
-    width: 44px;
+    width: 84px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--ink);
-    border-radius: 6px;
-    padding: 5px 6px;
-    font-size: 13px;
+    border-radius: 7px;
+    padding: 7px 8px;
+    font-size: 14px;
     text-align: right;
   }
   .discount-rate-input:focus {
@@ -723,10 +807,7 @@
   .final-price {
     color: var(--accent);
     font-weight: 700;
-    font-size: 13px;
-    min-width: 76px;
-    text-align: right;
-    flex: 0 0 auto;
+    font-size: 14px;
   }
   .final-price-muted {
     color: var(--ink-soft);
@@ -734,7 +815,12 @@
     font-style: italic;
     font-size: 12px;
   }
-  .product-list-row button.remove-btn {
+  .inherit-note {
+    color: var(--ink-soft);
+    font-weight: 400;
+    font-size: 11px;
+  }
+  .remove-btn, .remove-cat-btn {
     border: none;
     background: none;
     color: var(--danger);
@@ -779,7 +865,7 @@
   <h1>Nanum Market Calculator</h1>
   <div class="mode-switch">
     <button id="btn-calc" class="active">Calculator</button>
-    <button id="btn-manage">Manage products</button>
+    <button id="btn-manage">Manage products and discounts</button>
     <button id="btn-admin">Admin</button>
   </div>
 </header>
@@ -795,29 +881,42 @@
 
 <div class="total-bar" id="total-bar"></div>
 
-<script type="application/json" id="embedded-catalog">{"categories":["Services","Add-ons"],"products":[{"id":"p1","name":"Consultation","price":75,"category":"Services"},{"id":"p2","name":"Standard package","price":150,"category":"Services"},{"id":"p3","name":"Rush delivery","price":40,"category":"Add-ons"},{"id":"p4","name":"Extra revision","price":20,"category":"Add-ons"}]}</script>
+<script type="application/json" id="embedded-catalog">{"categories":["Food","Vegetable","Women","Men","Kids"],"products":[{"id":"p1","name":"Rice (5kg)","price":12.00,"category":"Food"},{"id":"p2","name":"Cooking Oil (1L)","price":6.50,"category":"Food"},{"id":"p3","name":"Instant Noodles","price":1.50,"category":"Food"},{"id":"p4","name":"Tomatoes (1kg)","price":2.00,"category":"Vegetable"},{"id":"p5","name":"Onions (1kg)","price":1.50,"category":"Vegetable"},{"id":"p6","name":"Potatoes (1kg)","price":1.80,"category":"Vegetable"},{"id":"p7","name":"Women's T-Shirt","price":8.00,"category":"Women"},{"id":"p8","name":"Women's Dress","price":15.00,"category":"Women"},{"id":"p9","name":"Women's Scarf","price":5.00,"category":"Women"},{"id":"p10","name":"Men's T-Shirt","price":8.00,"category":"Men"},{"id":"p11","name":"Men's Jeans","price":20.00,"category":"Men"},{"id":"p12","name":"Men's Belt","price":6.00,"category":"Men"},{"id":"p13","name":"Kids T-Shirt","price":5.00,"category":"Kids"},{"id":"p14","name":"Kids Shorts","price":6.00,"category":"Kids"},{"id":"p15","name":"Kids Socks","price":2.00,"category":"Kids"}]}</script>
 <script>
 (function () {
   var STORAGE_KEY = 'price-it-out-data-v1'; // saved only in this browser
   var ADMIN_PASSWORD = '0926'; // client-side gate only — not real security, just keeps casual visitors out
 
   var DEFAULT_CATALOG = {
-    categories: ['Services', 'Add-ons'],
+    categories: ['Food', 'Vegetable', 'Women', 'Men', 'Kids'],
     products: [
-      { id: 'p1', name: 'Consultation', price: 75, category: 'Services' },
-      { id: 'p2', name: 'Standard package', price: 150, category: 'Services' },
-      { id: 'p3', name: 'Rush delivery', price: 40, category: 'Add-ons' },
-      { id: 'p4', name: 'Extra revision', price: 20, category: 'Add-ons' }
+      { id: 'p1', name: 'Rice (5kg)', price: 12.00, category: 'Food' },
+      { id: 'p2', name: 'Cooking Oil (1L)', price: 6.50, category: 'Food' },
+      { id: 'p3', name: 'Instant Noodles', price: 1.50, category: 'Food' },
+      { id: 'p4', name: 'Tomatoes (1kg)', price: 2.00, category: 'Vegetable' },
+      { id: 'p5', name: 'Onions (1kg)', price: 1.50, category: 'Vegetable' },
+      { id: 'p6', name: 'Potatoes (1kg)', price: 1.80, category: 'Vegetable' },
+      { id: 'p7', name: "Women's T-Shirt", price: 8.00, category: 'Women' },
+      { id: 'p8', name: "Women's Dress", price: 15.00, category: 'Women' },
+      { id: 'p9', name: "Women's Scarf", price: 5.00, category: 'Women' },
+      { id: 'p10', name: "Men's T-Shirt", price: 8.00, category: 'Men' },
+      { id: 'p11', name: "Men's Jeans", price: 20.00, category: 'Men' },
+      { id: 'p12', name: "Men's Belt", price: 6.00, category: 'Men' },
+      { id: 'p13', name: "Kids T-Shirt", price: 5.00, category: 'Kids' },
+      { id: 'p14', name: "Kids Shorts", price: 6.00, category: 'Kids' },
+      { id: 'p15', name: "Kids Socks", price: 2.00, category: 'Kids' }
     ]
   };
 
   var state = {
     categories: [],
     products: [],
+    categoryDiscounts: {}, // category name -> % off, applies to every product in it unless the product has its own rate
     activeCategory: '',
     selections: {}, // productId -> quantity (never persisted — a fresh cart every visit)
-    discount: { type: 'percent', value: 0 }, // checkout-level discount (never persisted)
-    discountPanelOpen: false,
+    customCart: [], // one-off items added on the fly: { id, name, price, qty } — never persisted
+    customItemPanelOpen: false,
+    discount: 0, // checkout-level discount, as a plain percentage
     itemsPanelOpen: true,
 
     adminUnlocked: false // resets on reload — Admin tab always asks for the password again
@@ -854,12 +953,31 @@
     } catch (e) {
       console.warn('Could not load saved data, starting fresh.', e);
     }
+    // Reads a discount as a plain percentage number. Also accepts a
+    // { type, value } object (from a brief earlier version of this
+    // page) by just taking its value and treating it as a percent.
+    function readPercent(raw) {
+      var v = (raw && typeof raw === 'object') ? raw.value : raw;
+      return (typeof v === 'number' && v > 0) ? Math.min(100, v) : null;
+    }
+
     state.categories = data.categories;
     state.products = data.products.map(function (p) {
-      var rate = (typeof p.discountRate === 'number' && p.discountRate > 0) ? Math.min(100, p.discountRate) : null;
-      return { id: p.id, name: p.name, price: p.price, category: p.category, discountRate: rate };
+      return { id: p.id, name: p.name, price: p.price, category: p.category, discountRate: readPercent(p.discountRate || p.discount) };
     });
+    state.categoryDiscounts = {};
+    if (data.categoryDiscounts && typeof data.categoryDiscounts === 'object') {
+      Object.keys(data.categoryDiscounts).forEach(function (cat) {
+        var r = readPercent(data.categoryDiscounts[cat]);
+        if (r) state.categoryDiscounts[cat] = r;
+      });
+    }
     state.activeCategory = data.categories[0] || '';
+
+    // The overall discount is a standing percentage set on the Manage
+    // products and discount page — it auto-saves and reloads just
+    // like the catalog itself, and travels along in a downloaded copy.
+    state.discount = readPercent(data.discount) || 0;
   }
 
   // Auto-saves the current catalog to this browser every time it
@@ -868,7 +986,9 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         categories: state.categories,
-        products: state.products
+        products: state.products,
+        categoryDiscounts: state.categoryDiscounts,
+        discount: state.discount
       }));
       showSavedPulse();
       return true;
@@ -879,17 +999,33 @@
     }
   }
 
-  // Bakes the current product list into a fresh copy of this exact
-  // file and downloads it — that copy will show these products the
-  // first time it's opened in any browser or on any device, with no
-  // import step needed.
+  // Bakes the current product list — and the current overall discount,
+  // if one is set — into a fresh copy of this exact file and downloads
+  // it. That copy will show these products, and start with that same
+  // discount already applied, the first time it's opened in any
+  // browser or on any device, with no import step needed.
   function downloadCopyWithProducts() {
     try {
       var tag = document.getElementById('embedded-catalog');
       if (tag) {
-        tag.textContent = JSON.stringify({ categories: state.categories, products: state.products });
+        tag.textContent = JSON.stringify({
+          categories: state.categories,
+          products: state.products,
+          categoryDiscounts: state.categoryDiscounts,
+          discount: state.discount
+        });
       }
-      var htmlStr = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      // Work on a detached copy of the page so the export always opens
+      // on the Calculator tab, no matter which tab is open right now.
+      var clone = document.documentElement.cloneNode(true);
+      [['btn-calc', 'view-calc'], ['btn-manage', 'view-manage'], ['btn-admin', 'view-admin']].forEach(function (pair) {
+        var btnEl = clone.querySelector('#' + pair[0]);
+        var viewEl = clone.querySelector('#' + pair[1]);
+        var isCalc = pair[0] === 'btn-calc';
+        if (btnEl) btnEl.classList.toggle('active', isCalc);
+        if (viewEl) viewEl.classList.toggle('active', isCalc);
+      });
+      var htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
       var blob = new Blob([htmlStr], { type: 'text/html' });
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a');
@@ -969,17 +1105,20 @@
       btn.addEventListener('click', function () {
         state.activeCategory = btn.getAttribute('data-cat');
         renderCalc();
+        // If the "+ Custom item" panel is open, its category default should
+        // track whichever tab is now active, not stay on the old one.
+        renderTotal();
       });
     });
 
     var productsInCat = state.products.filter(function (p) { return p.category === state.activeCategory; });
 
     if (cats.length === 0) {
-      gridAreaEl.innerHTML = '<div class="empty-note">No categories yet. Switch to "Manage products" to add your first category and product.</div>';
+      gridAreaEl.innerHTML = '<div class="empty-note">No categories yet. Add one from the "Manage products and discounts" tab.</div>';
       return;
     }
     if (productsInCat.length === 0) {
-      gridAreaEl.innerHTML = '<div class="empty-note">No products in this category yet. Add some from "Manage products".</div>';
+      gridAreaEl.innerHTML = '<div class="empty-note">No products in this category yet. Add one from the "Manage products and discounts" tab.</div>';
       return;
     }
 
@@ -1022,27 +1161,35 @@
     layoutGrid(gridEl, productsInCat.length);
   }
 
-  // Shared by both the per-item discounts and the checkout-level one:
-  // how much a { type, value } discount takes off a given base amount.
-  function computeDiscountAmount(discount, base) {
-    if (!discount || !(discount.value > 0) || !(base > 0)) return 0;
-    if (discount.type === 'percent') {
-      var pct = Math.min(100, Math.max(0, discount.value));
-      return base * (pct / 100);
-    }
-    return Math.min(discount.value, base);
+  // Every discount in this app is a plain percentage. How much a
+  // percent discount takes off a given base amount.
+  function computeDiscountAmount(percent, base) {
+    if (!(percent > 0) || !(base > 0)) return 0;
+    var pct = Math.min(100, Math.max(0, percent));
+    return base * (pct / 100);
   }
 
-  // A product's own discount rate (set in Manage products), clamped
-  // to a sane 0–100 range. 0 means no per-product discount.
-  function productDiscountRate(product) {
-    var r = product.discountRate;
+  // A category's own discount rate (set in Manage products), clamped
+  // to a sane 0–100 range. 0 means the category has no discount.
+  function categoryDiscountRate(cat) {
+    var r = state.categoryDiscounts[cat];
     if (typeof r !== 'number' || isNaN(r) || r <= 0) return 0;
     return Math.min(100, r);
   }
 
+  // The discount rate that actually applies to a product: its own
+  // rate if one is set, otherwise its category's rate, otherwise 0.
+  // A product-specific rate always wins over the category's.
+  function productDiscountRate(product) {
+    var own = product.discountRate;
+    if (typeof own === 'number' && !isNaN(own) && own > 0) {
+      return Math.min(100, own);
+    }
+    return categoryDiscountRate(product.category);
+  }
+
   // Subtotal, the per-product line items behind it (each already net
-  // of that product's own discount rate, if it has one), the
+  // of whichever discount rate applies to it, if any), the
   // checkout-level discount amount that applies on top, and the total.
   function computeTotals() {
     var subtotal = 0;
@@ -1067,9 +1214,33 @@
           discountRate: rate,
           baseLineSubtotal: baseLineSubtotal,
           itemDiscountAmount: itemDiscountAmount,
-          lineSubtotal: lineSubtotal
+          lineSubtotal: lineSubtotal,
+          isCustom: false
         });
       }
+    });
+    // One-off custom items added straight from the Calculator. They
+    // have no rate of their own, but if one was assigned a category
+    // when it was added, that category's discount still applies.
+    state.customCart.forEach(function (item) {
+      var rate = item.category ? categoryDiscountRate(item.category) : 0;
+      var baseLineSubtotal = item.price * item.qty;
+      var itemDiscountAmount = baseLineSubtotal * (rate / 100);
+      var lineSubtotal = Math.max(0, baseLineSubtotal - itemDiscountAmount);
+      subtotal += lineSubtotal;
+      count += item.qty;
+      lineItems.push({
+        id: item.id,
+        name: item.name,
+        qty: item.qty,
+        unitPrice: item.price,
+        category: item.category || '',
+        discountRate: rate,
+        baseLineSubtotal: baseLineSubtotal,
+        itemDiscountAmount: itemDiscountAmount,
+        lineSubtotal: lineSubtotal,
+        isCustom: true
+      });
     });
     var discountAmount = computeDiscountAmount(state.discount, subtotal);
     var total = Math.max(0, subtotal - discountAmount);
@@ -1078,8 +1249,7 @@
 
   function renderTotal() {
     var t = computeTotals();
-    var d = state.discount;
-    var hasDiscount = d.value > 0 && t.discountAmount > 0;
+    var hasDiscount = state.discount > 0 && t.discountAmount > 0;
 
     var itemsPanelHtml = '';
     if (state.itemsPanelOpen && t.lineItems.length > 0) {
@@ -1090,12 +1260,20 @@
             var priceHtml = hasItemDiscount
               ? '<span class="isub-was">' + fmt(item.baseLineSubtotal) + '</span><span class="isub-disc">' + fmt(item.lineSubtotal) + '</span>'
               : '<span class="isub">' + fmt(item.lineSubtotal) + '</span>';
+            var qtyHtml = item.isCustom
+              ? '<div class="mini-qty-row">' +
+                  '<button class="mini-qty-btn" data-action="dec" data-cid="' + item.id + '" aria-label="Decrease quantity">\u2013</button>' +
+                  '<span class="qty-val">' + item.qty + '</span>' +
+                  '<button class="mini-qty-btn" data-action="inc" data-cid="' + item.id + '" aria-label="Increase quantity">+</button>' +
+                '</div>'
+              : '<span class="iqty">\u00d7' + item.qty + '</span>';
             return '<div class="item-row-wrap">' +
               '<div class="item-row">' +
-                '<span class="iname">' + escapeHtml(item.name) + '</span>' +
+                '<span class="iname">' + escapeHtml(item.name) + (item.isCustom ? '<span class="custom-tag">custom</span>' : '') + '</span>' +
                 (hasItemDiscount ? '<span class="discount-tag">\u2013' + item.discountRate + '%</span>' : '') +
-                '<span class="iqty">\u00d7' + item.qty + '</span>' +
+                qtyHtml +
                 priceHtml +
+                (item.isCustom ? '<button class="custom-remove-btn" data-cid="' + item.id + '" title="Remove">\u00d7</button>' : '') +
               '</div>' +
             '</div>';
           }).join('') +
@@ -1104,9 +1282,7 @@
 
     var summaryHtml = '';
     if (hasDiscount) {
-      var discountLabel = d.type === 'percent'
-        ? '\u2013' + d.value + '%'
-        : '\u2013' + fmt(d.value);
+      var discountLabel = '\u2013' + state.discount + '%';
       summaryHtml =
         '<div class="summary-lines">' +
           '<div class="summary-line"><span>Subtotal</span><span>' + fmt(t.subtotal) + '</span></div>' +
@@ -1114,16 +1290,18 @@
         '</div>';
     }
 
-    var panelHtml = '';
-    if (state.discountPanelOpen) {
-      panelHtml =
-        '<div class="discount-panel">' +
-          '<div class="discount-type-toggle">' +
-            '<button data-type="percent" class="' + (d.type === 'percent' ? 'active' : '') + '">%</button>' +
-            '<button data-type="amount" class="' + (d.type === 'amount' ? 'active' : '') + '">$</button>' +
-          '</div>' +
-          '<input type="text" inputmode="decimal" id="discount-value" placeholder="' + (d.type === 'percent' ? '%' : '$') + ' off" value="' + (d.value > 0 ? d.value : '') + '">' +
-          (d.value > 0 ? '<button class="discount-remove" id="discount-remove-btn">Remove discount</button>' : '') +
+    var customPanelHtml = '';
+    if (state.customItemPanelOpen) {
+      var customCatOptionsHtml = state.categories.map(function (c) {
+        return '<option value="' + escapeHtml(c) + '"' + (c === state.activeCategory ? ' selected' : '') + '>' + escapeHtml(c) + '</option>';
+      }).join('') + '<option value=""' + (state.activeCategory ? '' : ' selected') + '>No category</option>';
+      customPanelHtml =
+        '<div class="custom-item-panel">' +
+          '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input-inline" id="custom-item-price" placeholder="Price"></div>' +
+          (state.categories.length > 0
+            ? '<select id="custom-item-cat" title="The item will be named after this category and use its discount">' + customCatOptionsHtml + '</select>'
+            : '') +
+          '<button class="btn-primary" id="custom-item-add-btn">Add to cart</button>' +
         '</div>';
     }
 
@@ -1132,7 +1310,7 @@
     if (canToggleItems) countLabel += (state.itemsPanelOpen ? ' \u25b2' : ' \u25bc');
 
     totalBarEl.innerHTML =
-      panelHtml +
+      customPanelHtml +
       itemsPanelHtml +
       summaryHtml +
       '<div class="total-row">' +
@@ -1141,14 +1319,14 @@
           '<div class="count' + (canToggleItems ? ' count-toggle' : '') + '" id="items-toggle">' + countLabel + '</div>' +
         '</div>' +
         '<div class="total-actions">' +
-          '<button class="pill-btn' + (hasDiscount ? ' has-discount' : '') + '" id="discount-toggle-btn">' + (hasDiscount ? 'Discount applied' : 'Discount') + '</button>' +
-          '<button class="pill-btn" id="clear-btn">Clear</button>' +
+          '<button class="pill-btn' + (state.customItemPanelOpen ? ' has-discount' : '') + '" id="custom-item-toggle-btn">+ Custom item</button>' +
+          '<button class="pill-btn" id="clear-btn">Clear cart</button>' +
           '<div class="amount">' + fmt(t.total) + '</div>' +
         '</div>' +
       '</div>';
 
-    document.getElementById('discount-toggle-btn').addEventListener('click', function () {
-      state.discountPanelOpen = !state.discountPanelOpen;
+    document.getElementById('custom-item-toggle-btn').addEventListener('click', function () {
+      state.customItemPanelOpen = !state.customItemPanelOpen;
       renderTotal();
       relayoutCurrentGrid();
     });
@@ -1163,49 +1341,72 @@
 
     document.getElementById('clear-btn').addEventListener('click', function () {
       state.selections = {};
+      state.customCart = [];
       renderCalc();
       renderTotal();
     });
 
-    if (state.discountPanelOpen) {
-      totalBarEl.querySelectorAll('.discount-panel .discount-type-toggle button').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          state.discount.type = btn.getAttribute('data-type');
-          renderTotal();
-        });
+    // Quantity +/- and remove for one-off custom items in the items list.
+    totalBarEl.querySelectorAll('.mini-qty-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var cid = btn.getAttribute('data-cid');
+        var action = btn.getAttribute('data-action');
+        var entry = state.customCart.filter(function (c) { return c.id === cid; })[0];
+        if (!entry) return;
+        if (action === 'inc') entry.qty += 1;
+        if (action === 'dec') entry.qty -= 1;
+        if (entry.qty <= 0) {
+          state.customCart = state.customCart.filter(function (c) { return c.id !== cid; });
+        }
+        renderTotal();
+        relayoutCurrentGrid();
       });
+    });
 
-      var valueInput = document.getElementById('discount-value');
-      valueInput.addEventListener('input', function () {
-        // Only digits and a single decimal point are meaningful here.
-        var cleaned = valueInput.value.replace(/[^0-9.]/g, '');
+    totalBarEl.querySelectorAll('.custom-remove-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var cid = btn.getAttribute('data-cid');
+        state.customCart = state.customCart.filter(function (c) { return c.id !== cid; });
+        renderTotal();
+        relayoutCurrentGrid();
+      });
+    });
+
+    if (state.customItemPanelOpen) {
+      var customPriceInput = document.getElementById('custom-item-price');
+
+      customPriceInput.addEventListener('input', function () {
+        var cleaned = customPriceInput.value.replace(/[^0-9.]/g, '');
         var firstDot = cleaned.indexOf('.');
         if (firstDot !== -1) {
           cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
         }
-        if (cleaned !== valueInput.value) valueInput.value = cleaned;
-        var v = parseFloat(cleaned);
-        if (state.discount.type === 'percent' && !isNaN(v)) v = Math.min(100, v);
-        state.discount.value = (isNaN(v) || v < 0) ? 0 : v;
-        renderTotal();
+        if (cleaned !== customPriceInput.value) customPriceInput.value = cleaned;
       });
-      // Keep focus in the field while typing — re-render moved it, so
-      // put the cursor back and don't re-render on every keystroke's
-      // focus loss.
-      valueInput.focus();
-      try {
-        var len = valueInput.value.length;
-        valueInput.setSelectionRange(len, len);
-      } catch (e) {}
 
-      var removeBtn = document.getElementById('discount-remove-btn');
-      if (removeBtn) {
-        removeBtn.addEventListener('click', function () {
-          state.discount.value = 0;
-          renderTotal();
-          relayoutCurrentGrid();
-        });
+      function addCustomItem() {
+        var v = parseFloat(customPriceInput.value);
+        if (isNaN(v) || v < 0) {
+          customPriceInput.focus();
+          return;
+        }
+        var catSelect = document.getElementById('custom-item-cat');
+        var category = catSelect ? catSelect.value : '';
+        var name = category || 'Custom item';
+        state.customCart.push({ id: uid(), name: name, price: v, qty: 1, category: category });
+        customPriceInput.value = '';
+        state.itemsPanelOpen = true;
+        renderTotal();
+        relayoutCurrentGrid();
+        // Keep the panel open and ready for another quick entry.
+        var freshPriceInput = document.getElementById('custom-item-price');
+        if (freshPriceInput) freshPriceInput.focus();
       }
+
+      document.getElementById('custom-item-add-btn').addEventListener('click', addCustomItem);
+      customPriceInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') addCustomItem();
+      });
     }
 
     relayoutCurrentGrid();
@@ -1235,40 +1436,71 @@
   }
 
   function renderManage() {
-    var catChips = state.categories.map(function (c) {
-      return '<div class="cat-chip">' + escapeHtml(c) + '<button data-cat="' + escapeHtml(c) + '" title="Remove category">&times;</button></div>';
-    }).join('');
+    var catRowsHtml = state.categories.length > 0
+      ? state.categories.map(function (cat) {
+          return '<div class="product-list-row">' +
+            '<span class="pname">' + escapeHtml(cat) + '</span>' +
+            '<button class="remove-cat-btn" data-cat="' + escapeHtml(cat) + '">Remove</button>' +
+            '</div>';
+        }).join('')
+      : '<div class="product-list-row"><span class="pname" style="font-weight:400; color:var(--ink-soft);">No categories yet.</span></div>';
 
     var catOptions = state.categories.map(function (c) {
       return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
     }).join('');
 
     // Group products under their category, in the same order the
-    // category chips appear, so the list mirrors how the calculator
+    // category list appears, so the list mirrors how the calculator
     // itself is organized.
     var productGroupsHtml = state.categories.map(function (cat) {
       var productsInCat = state.products.filter(function (p) { return p.category === cat; });
+      var catRate = categoryDiscountRate(cat);
       var rowsHtml = productsInCat.length > 0
         ? productsInCat.map(function (p) {
-            var rate = productDiscountRate(p);
-            var rateVal = rate > 0 ? rate : '';
-            var finalPriceHtml = rate > 0
-              ? '<span class="final-price">\u2192 ' + fmt(p.price * (1 - rate / 100)) + '</span>'
-              : '<span class="final-price final-price-muted">no discount</span>';
-            return '<div class="product-list-row">' +
-              '<span class="pname">' + escapeHtml(p.name) + '</span>' +
-              '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input" data-id="' + p.id + '" value="' + p.price.toFixed(2) + '"></div>' +
-              '<div class="discount-rate-field"><input type="text" inputmode="decimal" class="discount-rate-input" placeholder="0" data-id="' + p.id + '" value="' + rateVal + '"><span class="price-currency">% off</span></div>' +
-              finalPriceHtml +
-              '<button class="remove-btn" data-id="' + p.id + '">Remove</button>' +
+            var ownRate = (typeof p.discountRate === 'number' && p.discountRate > 0) ? p.discountRate : null;
+            var rateVal = ownRate != null ? ownRate : '';
+            var ratePlaceholder = catRate > 0 ? ('cat: ' + catRate) : '0';
+            return '<div class="product-card-row">' +
+              '<div class="product-card-row-top">' +
+                '<span class="pname">' + escapeHtml(p.name) + '</span>' +
+                '<button class="remove-btn" data-id="' + p.id + '">Remove</button>' +
+              '</div>' +
+              '<div class="product-card-row-fields">' +
+                '<div class="field-stack">' +
+                  '<span class="field-label">Price</span>' +
+                  '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input" data-id="' + p.id + '" value="' + p.price.toFixed(2) + '"></div>' +
+                '</div>' +
+                '<div class="field-stack">' +
+                  '<span class="field-label">Discount</span>' +
+                  '<div class="discount-rate-field"><input type="text" inputmode="decimal" class="discount-rate-input" placeholder="' + ratePlaceholder + '" data-id="' + p.id + '" value="' + rateVal + '"><span class="price-currency">% off</span></div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="product-card-row-result">' + finalPriceMarkup(p) + '</div>' +
               '</div>';
           }).join('')
-        : '<div class="product-list-row"><span class="pname" style="font-weight:400; color:var(--ink-soft);">No products in this category yet.</span></div>';
+        : '<div class="product-card-row"><span class="pname" style="font-weight:400; color:var(--ink-soft);">No products in this category yet.</span></div>';
+      var catRateVal = catRate > 0 ? catRate : '';
+      var catNote = catRate > 0 ? '<span class="inherit-note">Applies to every product below unless it has its own rate.</span>' : '';
       return '<div class="product-group">' +
-        '<div class="product-group-title">' + escapeHtml(cat) + '</div>' +
+        '<div class="product-group-header">' +
+          '<div class="product-group-header-row">' +
+            '<span class="product-group-name">' + escapeHtml(cat) + '</span>' +
+            '<div class="field-stack">' +
+              '<span class="field-label">Category discount</span>' +
+              '<div class="discount-rate-field category-group-discount"><input type="text" inputmode="decimal" class="category-discount-input" placeholder="0" data-cat="' + escapeHtml(cat) + '" value="' + catRateVal + '"><span class="price-currency">% off</span></div>' +
+            '</div>' +
+          '</div>' +
+          catNote +
+        '</div>' +
         '<div class="product-list">' + rowsHtml + '</div>' +
       '</div>';
     }).join('');
+
+    var overallDiscountValueHtml =
+      '<div class="discount-rate-field">' +
+        '<input type="text" inputmode="decimal" id="overall-discount-value" placeholder="0" value="' + (state.discount > 0 ? state.discount : '') + '">' +
+        '<span class="price-currency">% off</span>' +
+      '</div>';
 
     manageEl.innerHTML =
       '<div class="device-notice">' +
@@ -1276,10 +1508,15 @@
         '<p>Changes you make here (products, prices, categories) are saved only on this phone or computer, in this web browser. If someone opens this page on a different device or browser, they won\'t see your changes — and won\'t know about theirs either. There\'s no shared, central list.</p>' +
       '</div>' +
       '<div class="manage-section">' +
+        '<h2>Overall discount</h2>' +
+        '<p class="hint">Applies to the whole order total in the Calculator, on top of any category or item discounts. Leave it blank for no standing discount.</p>' +
+        overallDiscountValueHtml +
+      '</div>' +
+      '<div class="manage-section">' +
         '<h2>Categories</h2>' +
-        '<p class="hint">Categories group your products. The calculator shows one category at a time.</p>' +
-        '<div class="cat-chip-list">' + (catChips || '<span class="hint" style="margin:0;">No categories yet.</span>') + '</div>' +
-        '<div class="add-row">' +
+        '<p class="hint">Categories group your products. The calculator shows one category at a time. Set a category-wide discount from the Products section below, next to each category\'s name.</p>' +
+        '<div class="product-list">' + catRowsHtml + '</div>' +
+        '<div class="add-row" style="margin-top:14px;">' +
           '<input type="text" id="new-cat-name" placeholder="New category name">' +
           '<button class="btn-primary" id="add-cat-btn">Add category</button>' +
         '</div>' +
@@ -1295,17 +1532,87 @@
         (productGroupsHtml || '<p class="hint" style="margin:0;">Add a category above first — products will show up here grouped by category.</p>') +
       '</div>';
 
-    manageEl.querySelectorAll('.cat-chip button').forEach(function (btn) {
+    var overallDiscountInput = document.getElementById('overall-discount-value');
+    if (overallDiscountInput) {
+      function applyOverallDiscount() {
+        var raw = overallDiscountInput.value.trim();
+        if (raw === '') {
+          state.discount = 0;
+        } else {
+          var v = parseFloat(raw);
+          if (isNaN(v) || v < 0) {
+            overallDiscountInput.value = state.discount > 0 ? state.discount : ''; // revert on bad input
+            return;
+          }
+          state.discount = Math.min(100, v);
+        }
+        persist();
+        renderManage();
+        renderTotal();
+      }
+      overallDiscountInput.addEventListener('input', function () {
+        var cleaned = overallDiscountInput.value.replace(/[^0-9.]/g, '');
+        var firstDot = cleaned.indexOf('.');
+        if (firstDot !== -1) {
+          cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+        }
+        if (cleaned !== overallDiscountInput.value) overallDiscountInput.value = cleaned;
+      });
+      overallDiscountInput.addEventListener('blur', applyOverallDiscount);
+      overallDiscountInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { applyOverallDiscount(); overallDiscountInput.blur(); }
+      });
+    }
+
+    manageEl.querySelectorAll('.remove-cat-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var cat = btn.getAttribute('data-cat');
         state.categories = state.categories.filter(function (c) { return c !== cat; });
         state.products = state.products.filter(function (p) { return p.category !== cat; });
+        delete state.categoryDiscounts[cat];
         if (state.activeCategory === cat) {
           state.activeCategory = state.categories[0] || '';
         }
         persist();
         renderManage();
         renderCalc();
+        renderTotal();
+      });
+    });
+
+    manageEl.querySelectorAll('.category-discount-input').forEach(function (input) {
+      function applyCategoryRate() {
+        var cat = input.getAttribute('data-cat');
+        var raw = input.value.trim();
+        if (raw === '') {
+          delete state.categoryDiscounts[cat];
+        } else {
+          var v = parseFloat(raw);
+          if (isNaN(v) || v < 0) {
+            input.value = categoryDiscountRate(cat) > 0 ? categoryDiscountRate(cat) : ''; // revert on bad input
+            return;
+          }
+          state.categoryDiscounts[cat] = Math.min(100, v);
+        }
+        persist();
+        // A category rate can change the effective discount on every
+        // product in it that has no rate of its own, so refresh the
+        // whole page rather than trying to patch individual rows.
+        renderManage();
+        renderCalc();
+        renderTotal();
+      }
+      input.addEventListener('input', function () {
+        var cleaned = input.value.replace(/[^0-9.]/g, '');
+        var firstDot = cleaned.indexOf('.');
+        if (firstDot !== -1) {
+          cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+        }
+        if (cleaned !== input.value) input.value = cleaned;
+      });
+      input.addEventListener('blur', applyCategoryRate);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { applyCategoryRate(); input.blur(); }
       });
     });
 
@@ -1325,18 +1632,23 @@
     // price or discount rate changes, without re-rendering the whole
     // Manage products page (which would disrupt whatever else the
     // person is doing on the page).
+    function finalPriceMarkup(product) {
+      var ownRate = (typeof product.discountRate === 'number' && product.discountRate > 0) ? product.discountRate : null;
+      var rate = productDiscountRate(product);
+      if (rate <= 0) {
+        return '<span class="final-price final-price-muted">No discount</span>';
+      }
+      var inherited = ownRate == null; // no rate of its own — this came from the category
+      return '<span class="final-price">\u2192 ' + fmt(product.price * (1 - rate / 100)) +
+        (inherited ? ' <span class="inherit-note">(category)</span>' : '') +
+        '</span>';
+    }
+
     function refreshRowFinalPrice(inputEl, product) {
-      var row = inputEl.closest('.product-list-row');
+      var row = inputEl.closest('.product-card-row');
       var span = row && row.querySelector('.final-price');
       if (!span) return;
-      var rate = productDiscountRate(product);
-      if (rate > 0) {
-        span.className = 'final-price';
-        span.textContent = '\u2192 ' + fmt(product.price * (1 - rate / 100));
-      } else {
-        span.className = 'final-price final-price-muted';
-        span.textContent = 'no discount';
-      }
+      span.outerHTML = finalPriceMarkup(product);
     }
 
     manageEl.querySelectorAll('.price-input').forEach(function (input) {
@@ -1495,7 +1807,7 @@
       '<div class="admin-lock">' +
         '<div class="admin-lock-card" style="text-align:left;">' +
           '<h2 style="text-align:center; margin-bottom:14px;">Admin</h2>' +
-          '<p class="hint">Download a copy of today\'s product list — useful for carrying it to another device or keeping a backup.</p>' +
+          '<p class="hint">Saves today\'s product list — and the overall discount, if one is set — as a new copy of this file. Useful for moving it to another device or keeping a backup.</p>' +
           '<button class="btn-save" id="download-btn" style="width:100%; display:flex; justify-content:center; margin-bottom:12px;">Download copy with these products</button>' +
           '<div style="text-align:center;"><button class="lock-btn" id="admin-lock-btn">Lock this page</button></div>' +
         '</div>' +

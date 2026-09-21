@@ -218,7 +218,30 @@
     color: var(--ink-soft);
     font-weight: 500;
   }
+  .product-card .price-was {
+    font-size: clamp(11px, 1.6vmin, 15px);
+    color: var(--ink-soft);
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+  .product-card .price-discounted {
+    font-size: clamp(13px, 2vmin, 18px);
+    color: var(--accent);
+    font-weight: 700;
+  }
   .product-card.selected .price { color: var(--accent); }
+  .discount-flag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 7px;
+    border-radius: 999px;
+  }
   .qty-row {
     display: flex;
     align-items: center;
@@ -300,22 +323,24 @@
     text-decoration-color: var(--ink-soft);
   }
   .items-panel {
-    max-height: 160px;
+    max-height: 220px;
     overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius-s);
     background: var(--surface-sunken);
     margin-bottom: 8px;
   }
+  .item-row-wrap {
+    border-bottom: 1px solid var(--border);
+  }
+  .item-row-wrap:last-child { border-bottom: none; }
   .item-row {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 8px;
     padding: 7px 10px;
     font-size: 13px;
-    border-bottom: 1px solid var(--border);
   }
-  .item-row:last-child { border-bottom: none; }
   .item-row .iname {
     flex: 1 1 auto;
     font-weight: 600;
@@ -332,6 +357,26 @@
     color: var(--ink-soft);
     min-width: 58px;
     text-align: right;
+    flex: 0 0 auto;
+  }
+  .item-row .isub-was {
+    color: var(--ink-soft);
+    text-decoration: line-through;
+    opacity: 0.7;
+    font-size: 12px;
+    flex: 0 0 auto;
+  }
+  .item-row .isub-disc {
+    color: var(--accent);
+    font-weight: 700;
+    min-width: 50px;
+    text-align: right;
+    flex: 0 0 auto;
+  }
+  .item-row .discount-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
     flex: 0 0 auto;
   }
   .total-row .amount {
@@ -391,7 +436,7 @@
     color: var(--ink);
     box-shadow: var(--shadow);
   }
-  .discount-panel input[type="number"] {
+  .discount-panel input {
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--ink);
@@ -401,7 +446,7 @@
     width: 90px;
     flex: 0 0 auto;
   }
-  .discount-panel input[type="number"]:focus {
+  .discount-panel input:focus {
     outline: 2px solid var(--accent);
     outline-offset: -1px;
   }
@@ -415,8 +460,8 @@
     padding: 6px 4px;
   }
 
-  /* ---------- Manage view ---------- */
-  #view-manage {
+  /* ---------- Manage view + Admin view ---------- */
+  #view-manage, #view-admin {
     flex: 1 1 auto;
     min-height: 0;
     display: none;
@@ -424,7 +469,7 @@
     overflow-y: auto;
     padding: 18px 20px 30px;
   }
-  #view-manage.active { display: flex; }
+  #view-manage.active, #view-admin.active { display: flex; }
 
   .manage-toolbar {
     display: flex;
@@ -437,6 +482,66 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-m);
     background: var(--surface);
+  }
+  .lock-btn {
+    border: none;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 6px;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+  }
+  .admin-lock {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+  }
+  .admin-lock-card {
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: var(--radius-m);
+    padding: 24px 22px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .admin-lock-card h2 {
+    font-size: 17px;
+    font-weight: 800;
+    margin: 0 0 6px;
+  }
+  .admin-lock-card input {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--surface-sunken);
+    color: var(--ink);
+    border-radius: var(--radius-s);
+    padding: 11px 12px;
+    font-size: 15px;
+    text-align: center;
+    margin: 14px 0 10px;
+    letter-spacing: 0.1em;
+  }
+  .admin-lock-card input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .admin-lock-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+  .admin-lock-error {
+    color: var(--danger);
+    font-size: 13px;
+    margin: 10px 0 0;
   }
   .manage-toolbar .status {
     font-size: 13px;
@@ -590,6 +695,31 @@
     outline: 2px solid var(--accent);
     outline-offset: -1px;
   }
+  .discount-rate-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+  }
+  .discount-rate-field .price-currency {
+    color: var(--ink-soft);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .discount-rate-input {
+    width: 44px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 5px 6px;
+    font-size: 13px;
+    text-align: right;
+  }
+  .discount-rate-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
   .product-list-row button.remove-btn {
     border: none;
     background: none;
@@ -606,6 +736,27 @@
     line-height: 1.5;
     margin: 0 0 16px;
   }
+  .device-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--warn);
+    background: var(--surface-sunken);
+    border-radius: var(--radius-m);
+    margin-bottom: 20px;
+  }
+  .device-notice .device-notice-icon {
+    font-size: 16px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .device-notice p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
 </style>
 </head>
 <body>
@@ -615,6 +766,7 @@
   <div class="mode-switch">
     <button id="btn-calc" class="active">Calculator</button>
     <button id="btn-manage">Manage products</button>
+    <button id="btn-admin">Admin</button>
   </div>
 </header>
 
@@ -624,6 +776,7 @@
     <div class="grid-area" id="grid-area"></div>
   </div>
   <div id="view-manage"></div>
+  <div id="view-admin"></div>
 </main>
 
 <div class="total-bar" id="total-bar"></div>
@@ -632,6 +785,7 @@
 <script>
 (function () {
   var STORAGE_KEY = 'price-it-out-data-v1'; // saved only in this browser
+  var ADMIN_PASSWORD = '0926'; // client-side gate only — not real security, just keeps casual visitors out
 
   var DEFAULT_CATALOG = {
     categories: ['Services', 'Add-ons'],
@@ -650,7 +804,9 @@
     selections: {}, // productId -> quantity (never persisted — a fresh cart every visit)
     discount: { type: 'percent', value: 0 }, // checkout-level discount (never persisted)
     discountPanelOpen: false,
-    itemsPanelOpen: true
+    itemsPanelOpen: true,
+
+    adminUnlocked: false // resets on reload — Admin tab always asks for the password again
   };
 
   // The catalog baked into this specific file (see the <script
@@ -686,7 +842,8 @@
     }
     state.categories = data.categories;
     state.products = data.products.map(function (p) {
-      return { id: p.id, name: p.name, price: p.price, category: p.category };
+      var rate = (typeof p.discountRate === 'number' && p.discountRate > 0) ? Math.min(100, p.discountRate) : null;
+      return { id: p.id, name: p.name, price: p.price, category: p.category, discountRate: rate };
     });
     state.activeCategory = data.categories[0] || '';
   }
@@ -818,9 +975,15 @@
     gridEl.innerHTML = productsInCat.map(function (p) {
       var qty = state.selections[p.id] || 0;
       var selected = qty > 0;
+      var rate = productDiscountRate(p);
+      var hasDiscount = rate > 0;
+      var priceHtml = hasDiscount
+        ? '<span class="price-was">' + fmt(p.price) + '</span><span class="price-discounted">' + fmt(p.price * (1 - rate / 100)) + '</span>'
+        : '<span class="price">' + fmt(p.price) + '</span>';
       return '<div class="product-card' + (selected ? ' selected' : '') + '" data-id="' + p.id + '">' +
+        (hasDiscount ? '<span class="discount-flag">\u2013' + rate + '%</span>' : '') +
         '<span class="name">' + escapeHtml(p.name) + '</span>' +
-        '<span class="price-line"><span class="price">' + fmt(p.price) + '</span></span>' +
+        '<span class="price-line">' + priceHtml + '</span>' +
         '<div class="qty-row">' +
           '<button class="qty-btn" data-action="dec" data-id="' + p.id + '" aria-label="Decrease quantity">–</button>' +
           '<span class="qty-val">' + qty + '</span>' +
@@ -845,8 +1008,28 @@
     layoutGrid(gridEl, productsInCat.length);
   }
 
-  // Subtotal, the per-product line items behind it, the discount
-  // amount it produces, and the final total after the discount.
+  // Shared by both the per-item discounts and the checkout-level one:
+  // how much a { type, value } discount takes off a given base amount.
+  function computeDiscountAmount(discount, base) {
+    if (!discount || !(discount.value > 0) || !(base > 0)) return 0;
+    if (discount.type === 'percent') {
+      var pct = Math.min(100, Math.max(0, discount.value));
+      return base * (pct / 100);
+    }
+    return Math.min(discount.value, base);
+  }
+
+  // A product's own discount rate (set in Manage products), clamped
+  // to a sane 0–100 range. 0 means no per-product discount.
+  function productDiscountRate(product) {
+    var r = product.discountRate;
+    if (typeof r !== 'number' || isNaN(r) || r <= 0) return 0;
+    return Math.min(100, r);
+  }
+
+  // Subtotal, the per-product line items behind it (each already net
+  // of that product's own discount rate, if it has one), the
+  // checkout-level discount amount that applies on top, and the total.
   function computeTotals() {
     var subtotal = 0;
     var count = 0;
@@ -856,22 +1039,25 @@
     state.products.forEach(function (product) {
       var qty = state.selections[product.id] || 0;
       if (qty > 0) {
-        var lineSubtotal = product.price * qty;
+        var rate = productDiscountRate(product);
+        var baseLineSubtotal = product.price * qty;
+        var itemDiscountAmount = baseLineSubtotal * (rate / 100);
+        var lineSubtotal = Math.max(0, baseLineSubtotal - itemDiscountAmount);
         subtotal += lineSubtotal;
         count += qty;
-        lineItems.push({ name: product.name, qty: qty, unitPrice: product.price, lineSubtotal: lineSubtotal });
+        lineItems.push({
+          id: product.id,
+          name: product.name,
+          qty: qty,
+          unitPrice: product.price,
+          discountRate: rate,
+          baseLineSubtotal: baseLineSubtotal,
+          itemDiscountAmount: itemDiscountAmount,
+          lineSubtotal: lineSubtotal
+        });
       }
     });
-    var discountAmount = 0;
-    var d = state.discount;
-    if (d.value > 0 && subtotal > 0) {
-      if (d.type === 'percent') {
-        var pct = Math.min(100, Math.max(0, d.value));
-        discountAmount = subtotal * (pct / 100);
-      } else {
-        discountAmount = Math.min(d.value, subtotal);
-      }
-    }
+    var discountAmount = computeDiscountAmount(state.discount, subtotal);
     var total = Math.max(0, subtotal - discountAmount);
     return { subtotal: subtotal, discountAmount: discountAmount, total: total, count: count, lineItems: lineItems };
   }
@@ -886,10 +1072,17 @@
       itemsPanelHtml =
         '<div class="items-panel">' +
           t.lineItems.map(function (item) {
-            return '<div class="item-row">' +
-              '<span class="iname">' + escapeHtml(item.name) + '</span>' +
-              '<span class="iqty">\u00d7' + item.qty + '</span>' +
-              '<span class="isub">' + fmt(item.lineSubtotal) + '</span>' +
+            var hasItemDiscount = item.itemDiscountAmount > 0;
+            var priceHtml = hasItemDiscount
+              ? '<span class="isub-was">' + fmt(item.baseLineSubtotal) + '</span><span class="isub-disc">' + fmt(item.lineSubtotal) + '</span>'
+              : '<span class="isub">' + fmt(item.lineSubtotal) + '</span>';
+            return '<div class="item-row-wrap">' +
+              '<div class="item-row">' +
+                '<span class="iname">' + escapeHtml(item.name) + '</span>' +
+                (hasItemDiscount ? '<span class="discount-tag">\u2013' + item.discountRate + '%</span>' : '') +
+                '<span class="iqty">\u00d7' + item.qty + '</span>' +
+                priceHtml +
+              '</div>' +
             '</div>';
           }).join('') +
         '</div>';
@@ -961,7 +1154,7 @@
     });
 
     if (state.discountPanelOpen) {
-      totalBarEl.querySelectorAll('.discount-type-toggle button').forEach(function (btn) {
+      totalBarEl.querySelectorAll('.discount-panel .discount-type-toggle button').forEach(function (btn) {
         btn.addEventListener('click', function () {
           state.discount.type = btn.getAttribute('data-type');
           renderTotal();
@@ -1010,7 +1203,7 @@
     resizeTimer = setTimeout(relayoutCurrentGrid, 120);
   });
 
-  // ---------- Manage view ----------
+  // ---------- Manage view (open — no password) ----------
   var manageEl = document.getElementById('view-manage');
 
   function showSavedPulse() {
@@ -1043,9 +1236,11 @@
       var productsInCat = state.products.filter(function (p) { return p.category === cat; });
       var rowsHtml = productsInCat.length > 0
         ? productsInCat.map(function (p) {
+            var rateVal = (typeof p.discountRate === 'number' && p.discountRate > 0) ? p.discountRate : '';
             return '<div class="product-list-row">' +
               '<span class="pname">' + escapeHtml(p.name) + '</span>' +
               '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input" data-id="' + p.id + '" value="' + p.price.toFixed(2) + '"></div>' +
+              '<div class="discount-rate-field"><input type="text" inputmode="decimal" class="discount-rate-input" placeholder="0" data-id="' + p.id + '" value="' + rateVal + '"><span class="price-currency">% off</span></div>' +
               '<button class="remove-btn" data-id="' + p.id + '">Remove</button>' +
               '</div>';
           }).join('')
@@ -1057,6 +1252,10 @@
     }).join('');
 
     manageEl.innerHTML =
+      '<div class="device-notice">' +
+        '<span class="device-notice-icon">\u26a0\ufe0f</span>' +
+        '<p>Changes you make here (products, prices, categories) are saved only on this phone or computer, in this web browser. If someone opens this page on a different device or browser, they won\'t see your changes — and won\'t know about theirs either. There\'s no shared, central list.</p>' +
+      '</div>' +
       '<div class="manage-section">' +
         '<h2>Categories</h2>' +
         '<p class="hint">Categories group your products. The calculator shows one category at a time.</p>' +
@@ -1075,12 +1274,7 @@
           '<button class="btn-primary" id="add-prod-btn">Add product</button>' +
         '</div>' +
         (productGroupsHtml || '<p class="hint" style="margin:0;">Add a category above first — products will show up here grouped by category.</p>') +
-      '</div>' +
-      '<div class="manage-toolbar">' +
-        '<div class="status saved" id="manage-status"><span class="status-dot"></span>Saved on this device</div>' +
-        '<button class="btn-save" id="download-btn">Download copy with these products</button>' +
-      '</div>' +
-      '<p class="hint">This device auto-saves as you go. To carry today\'s product list to another browser or computer, download a copy above and open that file there instead.</p>';
+      '</div>';
 
     manageEl.querySelectorAll('.cat-chip button').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1142,6 +1336,41 @@
       });
     });
 
+    manageEl.querySelectorAll('.discount-rate-input').forEach(function (input) {
+      function applyRate() {
+        var id = input.getAttribute('data-id');
+        var product = state.products.filter(function (p) { return p.id === id; })[0];
+        if (!product) return;
+        var raw = input.value.trim();
+        if (raw === '') {
+          product.discountRate = null;
+        } else {
+          var v = parseFloat(raw);
+          if (isNaN(v) || v < 0) {
+            input.value = (product.discountRate > 0) ? product.discountRate : ''; // revert on bad input
+            return;
+          }
+          product.discountRate = Math.min(100, v);
+          input.value = product.discountRate;
+        }
+        persist();
+        renderCalc();
+        renderTotal();
+      }
+      input.addEventListener('input', function () {
+        var cleaned = input.value.replace(/[^0-9.]/g, '');
+        var firstDot = cleaned.indexOf('.');
+        if (firstDot !== -1) {
+          cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+        }
+        if (cleaned !== input.value) input.value = cleaned;
+      });
+      input.addEventListener('blur', applyRate);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { applyRate(); input.blur(); }
+      });
+    });
+
     document.getElementById('add-cat-btn').addEventListener('click', function () {
       var input = document.getElementById('new-cat-name');
       var name = input.value.trim();
@@ -1168,7 +1397,7 @@
       var price = parseFloat(priceInput.value);
       var category = catSelect ? catSelect.value : '';
       if (!name || isNaN(price) || price < 0 || !category) return;
-      state.products.push({ id: uid(), name: name, price: price, category: category });
+      state.products.push({ id: uid(), name: name, price: price, category: category, discountRate: null });
       persist();
       nameInput.value = '';
       priceInput.value = '';
@@ -1179,31 +1408,97 @@
     document.getElementById('new-prod-name').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') document.getElementById('add-prod-btn').click();
     });
+  }
+
+  // ---------- Admin view (password-protected) ----------
+  var adminEl = document.getElementById('view-admin');
+
+  function renderAdmin() {
+    if (!state.adminUnlocked) {
+      renderAdminLock();
+    } else {
+      renderAdminContent();
+    }
+  }
+
+  function renderAdminLock(showError) {
+    adminEl.innerHTML =
+      '<div class="admin-lock">' +
+        '<div class="admin-lock-card">' +
+          '<h2>Admin access</h2>' +
+          '<p class="hint" style="margin-bottom:0;">Enter the password to continue.</p>' +
+          '<input type="password" inputmode="numeric" id="admin-password" placeholder="Password" autocomplete="off">' +
+          '<button class="btn-primary" id="admin-unlock-btn">Unlock</button>' +
+          (showError ? '<p class="admin-lock-error">Incorrect password.</p>' : '') +
+        '</div>' +
+      '</div>';
+
+    var pwInput = document.getElementById('admin-password');
+
+    function tryUnlock() {
+      if (pwInput.value === ADMIN_PASSWORD) {
+        state.adminUnlocked = true;
+        renderAdmin();
+      } else {
+        renderAdminLock(true);
+      }
+    }
+
+    document.getElementById('admin-unlock-btn').addEventListener('click', tryUnlock);
+    pwInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') tryUnlock();
+    });
+    pwInput.focus();
+  }
+
+  function renderAdminContent() {
+    adminEl.innerHTML =
+      '<div class="admin-lock">' +
+        '<div class="admin-lock-card" style="text-align:left;">' +
+          '<h2 style="text-align:center; margin-bottom:14px;">Admin</h2>' +
+          '<p class="hint">Download a copy of today\'s product list — useful for carrying it to another device or keeping a backup.</p>' +
+          '<button class="btn-save" id="download-btn" style="width:100%; display:flex; justify-content:center; margin-bottom:12px;">Download copy with these products</button>' +
+          '<div style="text-align:center;"><button class="lock-btn" id="admin-lock-btn">Lock this page</button></div>' +
+        '</div>' +
+      '</div>';
 
     document.getElementById('download-btn').addEventListener('click', downloadCopyWithProducts);
+    document.getElementById('admin-lock-btn').addEventListener('click', function () {
+      state.adminUnlocked = false;
+      renderAdmin();
+    });
   }
 
   // ---------- Mode switching ----------
   var btnCalc = document.getElementById('btn-calc');
   var btnManage = document.getElementById('btn-manage');
+  var btnAdmin = document.getElementById('btn-admin');
   var viewCalc = document.getElementById('view-calc');
   var viewManage = document.getElementById('view-manage');
+  var viewAdmin = document.getElementById('view-admin');
+
+  var tabButtons = [btnCalc, btnManage, btnAdmin];
+  var tabViews = [viewCalc, viewManage, viewAdmin];
+
+  function activateTab(index) {
+    tabButtons.forEach(function (b, i) { b.classList.toggle('active', i === index); });
+    tabViews.forEach(function (v, i) { v.classList.toggle('active', i === index); });
+  }
 
   btnCalc.addEventListener('click', function () {
-    btnCalc.classList.add('active');
-    btnManage.classList.remove('active');
-    viewCalc.classList.add('active');
-    viewManage.classList.remove('active');
+    activateTab(0);
     renderCalc();
     renderTotal();
   });
 
   btnManage.addEventListener('click', function () {
-    btnManage.classList.add('active');
-    btnCalc.classList.remove('active');
-    viewManage.classList.add('active');
-    viewCalc.classList.remove('active');
+    activateTab(1);
     renderManage();
+  });
+
+  btnAdmin.addEventListener('click', function () {
+    activateTab(2);
+    renderAdmin();
   });
 
   load();

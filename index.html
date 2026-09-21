@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Price It Out">
+<meta name="theme-color" content="#F6F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17181A" media="(prefers-color-scheme: dark)">
+<title>Price It Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --surface-sunken: #EFEDE7;
+    --ink: #1B1D1B;
+    --ink-soft: #5A5D58;
+    --border: #E1DED5;
+    --accent: #2F6F4E;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E4EFE8;
+    --danger: #A6412B;
+    --warn: #9A6A16;
+    --radius-s: 8px;
+    --radius-m: 14px;
+    --shadow: 0 1px 2px rgba(20, 20, 15, 0.06);
+    box-sizing: border-box;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #17181A;
+      --surface: #1F2123;
+      --surface-sunken: #26282A;
+      --ink: #EDEEEA;
+      --ink-soft: #A2A6A0;
+      --border: #33362F;
+      --accent: #58A579;
+      --accent-ink: #0E1210;
+      --accent-soft: #223229;
+      --danger: #D9765E;
+      --warn: #D9B15E;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17181A;
+    --surface: #1F2123;
+    --surface-sunken: #26282A;
+    --ink: #EDEEEA;
+    --ink-soft: #A2A6A0;
+    --border: #33362F;
+    --accent: #58A579;
+    --accent-ink: #0E1210;
+    --accent-soft: #223229;
+    --danger: #D9765E;
+    --warn: #D9B15E;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-feature-settings: "tnum" 1;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  a, button { font-family: inherit; }
+
+  header {
+    flex: 0 0 auto;
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  header h1 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .mode-switch {
+    display: flex;
+    gap: 4px;
+    background: var(--surface-sunken);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .mode-switch button {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .mode-switch button.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+  }
+
+  main {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Calculator view ---------- */
+  #view-calc {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: none;
+    flex-direction: column;
+    padding: 12px 14px 0;
+  }
+  #view-calc.active { display: flex; }
+
+  .cat-tabs {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .cat-tab.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  .grid-area {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+  .product-grid {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+  }
+  .product-card {
+    position: relative;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: var(--radius-m);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .product-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .product-card .name {
+    font-size: clamp(14px, 2.4vmin, 22px);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1.25;
+    max-width: 100%;
+  }
+  .product-card .price-line {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+  .product-card .price {
+    font-size: clamp(13px, 2vmin, 18px);
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .product-card.selected .price { color: var(--accent); }
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .qty-btn {
+    width: clamp(28px, 5vmin, 40px);
+    height: clamp(28px, 5vmin, 40px);
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--surface-sunken);
+    color: var(--ink);
+    font-size: clamp(16px, 2.6vmin, 22px);
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  .qty-btn:active { transform: scale(0.94); }
+  .qty-val {
+    font-size: clamp(14px, 2.4vmin, 20px);
+    font-weight: 700;
+    min-width: 1.6em;
+    text-align: center;
+  }
+
+  .empty-note {
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 30px 4px;
+    text-align: center;
+  }
+
+  /* ---------- Total bar + discount ---------- */
+  .total-bar {
+    flex: 0 0 auto;
+    padding: 12px 20px 14px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .summary-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .summary-line.discount-line { color: var(--accent); font-weight: 600; }
+  .total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .total-row .label {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .total-row .count {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .count-toggle {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--ink-soft);
+  }
+  .items-panel {
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-s);
+    background: var(--surface-sunken);
+    margin-bottom: 8px;
+  }
+  .item-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .item-row:last-child { border-bottom: none; }
+  .item-row .iname {
+    flex: 1 1 auto;
+    font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-row .iqty {
+    color: var(--ink-soft);
+    flex: 0 0 auto;
+  }
+  .item-row .isub {
+    color: var(--ink-soft);
+    min-width: 58px;
+    text-align: right;
+    flex: 0 0 auto;
+  }
+  .total-row .amount {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .total-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pill-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: var(--radius-s);
+    cursor: pointer;
+  }
+  .pill-btn.has-discount {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .discount-panel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .discount-type-toggle {
+    display: flex;
+    gap: 3px;
+    background: var(--surface-sunken);
+    border-radius: 8px;
+    padding: 3px;
+    flex: 0 0 auto;
+  }
+  .discount-type-toggle button {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .discount-type-toggle button.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+  }
+  .discount-panel input[type="number"] {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--radius-s);
+    padding: 8px 10px;
+    font-size: 14px;
+    width: 90px;
+    flex: 0 0 auto;
+  }
+  .discount-panel input[type="number"]:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .discount-remove {
+    border: none;
+    background: none;
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 4px;
+  }
+
+  /* ---------- Manage view ---------- */
+  #view-manage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 18px 20px 30px;
+  }
+  #view-manage.active { display: flex; }
+
+  .manage-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+  .manage-toolbar .status {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-soft);
+    flex: 0 0 auto;
+  }
+  .status.dirty .status-dot { background: var(--warn); }
+  .status.dirty { color: var(--warn); }
+  .status.saved { color: var(--ink-soft); }
+  .btn-save {
+    border: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: var(--radius-s);
+    cursor: pointer;
+  }
+  .manage-section {
+    margin-bottom: 28px;
+    flex: 0 0 auto;
+  }
+  .manage-section h2 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--ink-soft);
+  }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .add-row input, .add-row select {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--radius-s);
+    padding: 10px 12px;
+    font-size: 14px;
+    flex: 1 1 120px;
+    min-width: 0;
+  }
+  .add-row input:focus, .add-row select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .btn-primary {
+    border: none;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
+  .cat-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .cat-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 6px 6px 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .cat-chip button {
+    border: none;
+    background: var(--surface-sunken);
+    color: var(--danger);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .product-group {
+    margin-bottom: 14px;
+  }
+  .product-group:last-child {
+    margin-bottom: 0;
+  }
+  .product-group-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    padding-left: 2px;
+  }
+  .product-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .product-list-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .product-list-row:last-child { border-bottom: none; }
+  .product-list-row .pname { font-weight: 600; flex: 1 1 100px; min-width: 90px; }
+  .price-field {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex: 0 0 auto;
+  }
+  .price-field .price-currency {
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .price-input {
+    width: 68px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 5px 6px;
+    font-size: 13px;
+    text-align: right;
+  }
+  .price-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .product-list-row button.remove-btn {
+    border: none;
+    background: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 6px;
+    flex: 0 0 auto;
+  }
+  .hint {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Price It Out</h1>
+  <div class="mode-switch">
+    <button id="btn-calc" class="active">Calculator</button>
+    <button id="btn-manage">Manage products</button>
+  </div>
+</header>
+
+<main>
+  <div id="view-calc" class="active">
+    <div class="cat-tabs" id="cat-tabs"></div>
+    <div class="grid-area" id="grid-area"></div>
+  </div>
+  <div id="view-manage"></div>
+</main>
+
+<div class="total-bar" id="total-bar"></div>
+
+<script type="application/json" id="embedded-catalog">{"categories":["Services","Add-ons"],"products":[{"id":"p1","name":"Consultation","price":75,"category":"Services"},{"id":"p2","name":"Standard package","price":150,"category":"Services"},{"id":"p3","name":"Rush delivery","price":40,"category":"Add-ons"},{"id":"p4","name":"Extra revision","price":20,"category":"Add-ons"}]}</script>
+<script>
+(function () {
+  var STORAGE_KEY = 'price-it-out-data-v1'; // saved only in this browser
+
+  var DEFAULT_CATALOG = {
+    categories: ['Services', 'Add-ons'],
+    products: [
+      { id: 'p1', name: 'Consultation', price: 75, category: 'Services' },
+      { id: 'p2', name: 'Standard package', price: 150, category: 'Services' },
+      { id: 'p3', name: 'Rush delivery', price: 40, category: 'Add-ons' },
+      { id: 'p4', name: 'Extra revision', price: 20, category: 'Add-ons' }
+    ]
+  };
+
+  var state = {
+    categories: [],
+    products: [],
+    activeCategory: '',
+    selections: {}, // productId -> quantity (never persisted — a fresh cart every visit)
+    discount: { type: 'percent', value: 0 }, // checkout-level discount (never persisted)
+    discountPanelOpen: false,
+    itemsPanelOpen: true
+  };
+
+  // The catalog baked into this specific file (see the <script
+  // type="application/json" id="embedded-catalog"> tag above). Every
+  // copy of this file carries whatever was embedded in it when it was
+  // downloaded, so it looks the same the first time it's opened
+  // anywhere — before any browser-specific edits happen.
+  function getEmbeddedCatalog() {
+    try {
+      var tag = document.getElementById('embedded-catalog');
+      if (tag) {
+        var parsed = JSON.parse(tag.textContent);
+        if (parsed && parsed.categories && parsed.products) return parsed;
+      }
+    } catch (e) {
+      console.warn('Could not read the catalog embedded in this file.', e);
+    }
+    return null;
+  }
+
+  function load() {
+    var data = getEmbeddedCatalog() || DEFAULT_CATALOG;
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.categories && parsed.products) {
+          data = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load saved data, starting fresh.', e);
+    }
+    state.categories = data.categories;
+    state.products = data.products.map(function (p) {
+      return { id: p.id, name: p.name, price: p.price, category: p.category };
+    });
+    state.activeCategory = data.categories[0] || '';
+  }
+
+  // Auto-saves the current catalog to this browser every time it
+  // changes, so a refresh or an accidental close/reopen keeps it.
+  function persist() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        categories: state.categories,
+        products: state.products
+      }));
+      showSavedPulse();
+      return true;
+    } catch (e) {
+      console.warn('Could not save data.', e);
+      showSaveError();
+      return false;
+    }
+  }
+
+  // Bakes the current product list into a fresh copy of this exact
+  // file and downloads it — that copy will show these products the
+  // first time it's opened in any browser or on any device, with no
+  // import step needed.
+  function downloadCopyWithProducts() {
+    try {
+      var tag = document.getElementById('embedded-catalog');
+      if (tag) {
+        tag.textContent = JSON.stringify({ categories: state.categories, products: state.products });
+      }
+      var htmlStr = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      var blob = new Blob([htmlStr], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'pricing-calculator.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    } catch (e) {
+      console.warn('Could not prepare the download.', e);
+      alert('Could not prepare the file for download in this browser.');
+    }
+  }
+
+  function fmt(n) {
+    return '$' + n.toFixed(2);
+  }
+
+  function uid() {
+    return 'p' + Math.random().toString(36).slice(2, 9);
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  // ---------- Calculator view ----------
+  var tabsEl = document.getElementById('cat-tabs');
+  var gridAreaEl = document.getElementById('grid-area');
+  var totalBarEl = document.getElementById('total-bar');
+
+  // Picks a column/row count so the cards fill the available area as
+  // evenly as possible, given how many products are in this category
+  // and the shape of the space they have to fill.
+  function computeGridDims(n, width, height) {
+    if (n <= 0) return { cols: 1, rows: 1 };
+    if (n === 1) return { cols: 1, rows: 1 };
+    var ratio = (width > 0 && height > 0) ? (width / height) : 1.6;
+    var cols = Math.round(Math.sqrt(n * ratio));
+    cols = Math.max(1, Math.min(cols, n));
+    var rows = Math.ceil(n / cols);
+    while (cols > 1 && (rows * cols - n) >= rows) {
+      cols -= 1;
+      rows = Math.ceil(n / cols);
+    }
+    return { cols: cols, rows: rows };
+  }
+
+  function layoutGrid(gridEl, count) {
+    if (!gridEl || count <= 0) return;
+    var rect = gridAreaEl.getBoundingClientRect();
+    var dims = computeGridDims(count, rect.width, rect.height);
+    gridEl.style.gridTemplateColumns = 'repeat(' + dims.cols + ', 1fr)';
+    gridEl.style.gridTemplateRows = 'repeat(' + dims.rows + ', 1fr)';
+  }
+
+  function relayoutCurrentGrid() {
+    var gridEl = document.getElementById('product-grid');
+    if (gridEl) {
+      var count = gridEl.querySelectorAll('.product-card').length;
+      layoutGrid(gridEl, count);
+    }
+  }
+
+  function renderCalc() {
+    var cats = state.categories;
+    var tabsHtml = cats.map(function (c) {
+      var active = c === state.activeCategory ? ' active' : '';
+      return '<button class="cat-tab' + active + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>';
+    }).join('');
+    tabsEl.innerHTML = tabsHtml;
+
+    tabsEl.querySelectorAll('.cat-tab').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        state.activeCategory = btn.getAttribute('data-cat');
+        renderCalc();
+      });
+    });
+
+    var productsInCat = state.products.filter(function (p) { return p.category === state.activeCategory; });
+
+    if (cats.length === 0) {
+      gridAreaEl.innerHTML = '<div class="empty-note">No categories yet. Switch to "Manage products" to add your first category and product.</div>';
+      return;
+    }
+    if (productsInCat.length === 0) {
+      gridAreaEl.innerHTML = '<div class="empty-note">No products in this category yet. Add some from "Manage products".</div>';
+      return;
+    }
+
+    gridAreaEl.innerHTML = '<div class="product-grid" id="product-grid"></div>';
+    var gridEl = document.getElementById('product-grid');
+
+    gridEl.innerHTML = productsInCat.map(function (p) {
+      var qty = state.selections[p.id] || 0;
+      var selected = qty > 0;
+      return '<div class="product-card' + (selected ? ' selected' : '') + '" data-id="' + p.id + '">' +
+        '<span class="name">' + escapeHtml(p.name) + '</span>' +
+        '<span class="price-line"><span class="price">' + fmt(p.price) + '</span></span>' +
+        '<div class="qty-row">' +
+          '<button class="qty-btn" data-action="dec" data-id="' + p.id + '" aria-label="Decrease quantity">–</button>' +
+          '<span class="qty-val">' + qty + '</span>' +
+          '<button class="qty-btn" data-action="inc" data-id="' + p.id + '" aria-label="Increase quantity">+</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    gridEl.querySelectorAll('.qty-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-id');
+        var action = btn.getAttribute('data-action');
+        var current = state.selections[id] || 0;
+        if (action === 'inc') current += 1;
+        if (action === 'dec') current = Math.max(0, current - 1);
+        state.selections[id] = current;
+        renderCalc();
+        renderTotal();
+      });
+    });
+
+    layoutGrid(gridEl, productsInCat.length);
+  }
+
+  // Subtotal, the per-product line items behind it, the discount
+  // amount it produces, and the final total after the discount.
+  function computeTotals() {
+    var subtotal = 0;
+    var count = 0;
+    var lineItems = [];
+    // Walk the catalog (not the selections object) so items list in a
+    // stable, familiar order rather than object-key order.
+    state.products.forEach(function (product) {
+      var qty = state.selections[product.id] || 0;
+      if (qty > 0) {
+        var lineSubtotal = product.price * qty;
+        subtotal += lineSubtotal;
+        count += qty;
+        lineItems.push({ name: product.name, qty: qty, unitPrice: product.price, lineSubtotal: lineSubtotal });
+      }
+    });
+    var discountAmount = 0;
+    var d = state.discount;
+    if (d.value > 0 && subtotal > 0) {
+      if (d.type === 'percent') {
+        var pct = Math.min(100, Math.max(0, d.value));
+        discountAmount = subtotal * (pct / 100);
+      } else {
+        discountAmount = Math.min(d.value, subtotal);
+      }
+    }
+    var total = Math.max(0, subtotal - discountAmount);
+    return { subtotal: subtotal, discountAmount: discountAmount, total: total, count: count, lineItems: lineItems };
+  }
+
+  function renderTotal() {
+    var t = computeTotals();
+    var d = state.discount;
+    var hasDiscount = d.value > 0 && t.discountAmount > 0;
+
+    var itemsPanelHtml = '';
+    if (state.itemsPanelOpen && t.lineItems.length > 0) {
+      itemsPanelHtml =
+        '<div class="items-panel">' +
+          t.lineItems.map(function (item) {
+            return '<div class="item-row">' +
+              '<span class="iname">' + escapeHtml(item.name) + '</span>' +
+              '<span class="iqty">\u00d7' + item.qty + '</span>' +
+              '<span class="isub">' + fmt(item.lineSubtotal) + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>';
+    }
+
+    var summaryHtml = '';
+    if (hasDiscount) {
+      var discountLabel = d.type === 'percent'
+        ? '\u2013' + d.value + '%'
+        : '\u2013' + fmt(d.value);
+      summaryHtml =
+        '<div class="summary-lines">' +
+          '<div class="summary-line"><span>Subtotal</span><span>' + fmt(t.subtotal) + '</span></div>' +
+          '<div class="summary-line discount-line"><span>Discount (' + discountLabel + ')</span><span>\u2013' + fmt(t.discountAmount) + '</span></div>' +
+        '</div>';
+    }
+
+    var panelHtml = '';
+    if (state.discountPanelOpen) {
+      panelHtml =
+        '<div class="discount-panel">' +
+          '<div class="discount-type-toggle">' +
+            '<button data-type="percent" class="' + (d.type === 'percent' ? 'active' : '') + '">%</button>' +
+            '<button data-type="amount" class="' + (d.type === 'amount' ? 'active' : '') + '">$</button>' +
+          '</div>' +
+          '<input type="text" inputmode="decimal" id="discount-value" placeholder="' + (d.type === 'percent' ? '%' : '$') + ' off" value="' + (d.value > 0 ? d.value : '') + '">' +
+          (d.value > 0 ? '<button class="discount-remove" id="discount-remove-btn">Remove discount</button>' : '') +
+        '</div>';
+    }
+
+    var canToggleItems = t.lineItems.length > 0;
+    var countLabel = t.count + (t.count === 1 ? ' item selected' : ' items selected');
+    if (canToggleItems) countLabel += (state.itemsPanelOpen ? ' \u25b2' : ' \u25bc');
+
+    totalBarEl.innerHTML =
+      panelHtml +
+      itemsPanelHtml +
+      summaryHtml +
+      '<div class="total-row">' +
+        '<div>' +
+          '<div class="label">Total</div>' +
+          '<div class="count' + (canToggleItems ? ' count-toggle' : '') + '" id="items-toggle">' + countLabel + '</div>' +
+        '</div>' +
+        '<div class="total-actions">' +
+          '<button class="pill-btn' + (hasDiscount ? ' has-discount' : '') + '" id="discount-toggle-btn">' + (hasDiscount ? 'Discount applied' : 'Discount') + '</button>' +
+          '<button class="pill-btn" id="clear-btn">Clear</button>' +
+          '<div class="amount">' + fmt(t.total) + '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('discount-toggle-btn').addEventListener('click', function () {
+      state.discountPanelOpen = !state.discountPanelOpen;
+      renderTotal();
+      relayoutCurrentGrid();
+    });
+
+    if (canToggleItems) {
+      document.getElementById('items-toggle').addEventListener('click', function () {
+        state.itemsPanelOpen = !state.itemsPanelOpen;
+        renderTotal();
+        relayoutCurrentGrid();
+      });
+    }
+
+    document.getElementById('clear-btn').addEventListener('click', function () {
+      state.selections = {};
+      renderCalc();
+      renderTotal();
+    });
+
+    if (state.discountPanelOpen) {
+      totalBarEl.querySelectorAll('.discount-type-toggle button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          state.discount.type = btn.getAttribute('data-type');
+          renderTotal();
+        });
+      });
+
+      var valueInput = document.getElementById('discount-value');
+      valueInput.addEventListener('input', function () {
+        // Only digits and a single decimal point are meaningful here.
+        var cleaned = valueInput.value.replace(/[^0-9.]/g, '');
+        var firstDot = cleaned.indexOf('.');
+        if (firstDot !== -1) {
+          cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+        }
+        if (cleaned !== valueInput.value) valueInput.value = cleaned;
+        var v = parseFloat(cleaned);
+        if (state.discount.type === 'percent' && !isNaN(v)) v = Math.min(100, v);
+        state.discount.value = (isNaN(v) || v < 0) ? 0 : v;
+        renderTotal();
+      });
+      // Keep focus in the field while typing — re-render moved it, so
+      // put the cursor back and don't re-render on every keystroke's
+      // focus loss.
+      valueInput.focus();
+      try {
+        var len = valueInput.value.length;
+        valueInput.setSelectionRange(len, len);
+      } catch (e) {}
+
+      var removeBtn = document.getElementById('discount-remove-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function () {
+          state.discount.value = 0;
+          renderTotal();
+          relayoutCurrentGrid();
+        });
+      }
+    }
+
+    relayoutCurrentGrid();
+  }
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(relayoutCurrentGrid, 120);
+  });
+
+  // ---------- Manage view ----------
+  var manageEl = document.getElementById('view-manage');
+
+  function showSavedPulse() {
+    var statusEl = document.getElementById('manage-status');
+    if (!statusEl) return;
+    statusEl.className = 'status saved';
+    statusEl.innerHTML = '<span class="status-dot"></span>Saved on this device';
+  }
+
+  function showSaveError() {
+    var statusEl = document.getElementById('manage-status');
+    if (!statusEl) return;
+    statusEl.className = 'status dirty';
+    statusEl.innerHTML = '<span class="status-dot"></span>Could not save — try again';
+  }
+
+  function renderManage() {
+    var catChips = state.categories.map(function (c) {
+      return '<div class="cat-chip">' + escapeHtml(c) + '<button data-cat="' + escapeHtml(c) + '" title="Remove category">&times;</button></div>';
+    }).join('');
+
+    var catOptions = state.categories.map(function (c) {
+      return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
+    }).join('');
+
+    // Group products under their category, in the same order the
+    // category chips appear, so the list mirrors how the calculator
+    // itself is organized.
+    var productGroupsHtml = state.categories.map(function (cat) {
+      var productsInCat = state.products.filter(function (p) { return p.category === cat; });
+      var rowsHtml = productsInCat.length > 0
+        ? productsInCat.map(function (p) {
+            return '<div class="product-list-row">' +
+              '<span class="pname">' + escapeHtml(p.name) + '</span>' +
+              '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input" data-id="' + p.id + '" value="' + p.price.toFixed(2) + '"></div>' +
+              '<button class="remove-btn" data-id="' + p.id + '">Remove</button>' +
+              '</div>';
+          }).join('')
+        : '<div class="product-list-row"><span class="pname" style="font-weight:400; color:var(--ink-soft);">No products in this category yet.</span></div>';
+      return '<div class="product-group">' +
+        '<div class="product-group-title">' + escapeHtml(cat) + '</div>' +
+        '<div class="product-list">' + rowsHtml + '</div>' +
+      '</div>';
+    }).join('');
+
+    manageEl.innerHTML =
+      '<div class="manage-section">' +
+        '<h2>Categories</h2>' +
+        '<p class="hint">Categories group your products. The calculator shows one category at a time.</p>' +
+        '<div class="cat-chip-list">' + (catChips || '<span class="hint" style="margin:0;">No categories yet.</span>') + '</div>' +
+        '<div class="add-row">' +
+          '<input type="text" id="new-cat-name" placeholder="New category name">' +
+          '<button class="btn-primary" id="add-cat-btn">Add category</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="manage-section">' +
+        '<h2>Products</h2>' +
+        '<div class="add-row">' +
+          '<input type="text" id="new-prod-name" placeholder="Product name">' +
+          '<input type="number" id="new-prod-price" placeholder="Price" step="0.01" min="0" style="flex:0 0 90px;">' +
+          '<select id="new-prod-cat">' + catOptions + '</select>' +
+          '<button class="btn-primary" id="add-prod-btn">Add product</button>' +
+        '</div>' +
+        (productGroupsHtml || '<p class="hint" style="margin:0;">Add a category above first — products will show up here grouped by category.</p>') +
+      '</div>' +
+      '<div class="manage-toolbar">' +
+        '<div class="status saved" id="manage-status"><span class="status-dot"></span>Saved on this device</div>' +
+        '<button class="btn-save" id="download-btn">Download copy with these products</button>' +
+      '</div>' +
+      '<p class="hint">This device auto-saves as you go. To carry today\'s product list to another browser or computer, download a copy above and open that file there instead.</p>';
+
+    manageEl.querySelectorAll('.cat-chip button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var cat = btn.getAttribute('data-cat');
+        state.categories = state.categories.filter(function (c) { return c !== cat; });
+        state.products = state.products.filter(function (p) { return p.category !== cat; });
+        if (state.activeCategory === cat) {
+          state.activeCategory = state.categories[0] || '';
+        }
+        persist();
+        renderManage();
+        renderCalc();
+      });
+    });
+
+    manageEl.querySelectorAll('button.remove-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-id');
+        state.products = state.products.filter(function (p) { return p.id !== id; });
+        delete state.selections[id];
+        persist();
+        renderManage();
+        renderCalc();
+        renderTotal();
+      });
+    });
+
+    manageEl.querySelectorAll('.price-input').forEach(function (input) {
+      function applyPrice() {
+        var id = input.getAttribute('data-id');
+        var product = state.products.filter(function (p) { return p.id === id; })[0];
+        if (!product) return;
+        var v = parseFloat(input.value);
+        if (isNaN(v) || v < 0) {
+          input.value = product.price.toFixed(2); // revert on bad input
+          return;
+        }
+        if (v === product.price) {
+          input.value = product.price.toFixed(2);
+          return;
+        }
+        product.price = v;
+        persist();
+        input.value = product.price.toFixed(2);
+        renderCalc();
+        renderTotal();
+      }
+      input.addEventListener('input', function () {
+        var cleaned = input.value.replace(/[^0-9.]/g, '');
+        var firstDot = cleaned.indexOf('.');
+        if (firstDot !== -1) {
+          cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+        }
+        if (cleaned !== input.value) input.value = cleaned;
+      });
+      input.addEventListener('blur', applyPrice);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { applyPrice(); input.blur(); }
+      });
+    });
+
+    document.getElementById('add-cat-btn').addEventListener('click', function () {
+      var input = document.getElementById('new-cat-name');
+      var name = input.value.trim();
+      if (!name) return;
+      if (state.categories.indexOf(name) === -1) {
+        state.categories.push(name);
+        if (!state.activeCategory) state.activeCategory = name;
+        persist();
+        renderManage();
+        renderCalc();
+      }
+      input.value = '';
+    });
+
+    document.getElementById('new-cat-name').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') document.getElementById('add-cat-btn').click();
+    });
+
+    document.getElementById('add-prod-btn').addEventListener('click', function () {
+      var nameInput = document.getElementById('new-prod-name');
+      var priceInput = document.getElementById('new-prod-price');
+      var catSelect = document.getElementById('new-prod-cat');
+      var name = nameInput.value.trim();
+      var price = parseFloat(priceInput.value);
+      var category = catSelect ? catSelect.value : '';
+      if (!name || isNaN(price) || price < 0 || !category) return;
+      state.products.push({ id: uid(), name: name, price: price, category: category });
+      persist();
+      nameInput.value = '';
+      priceInput.value = '';
+      renderManage();
+      renderCalc();
+    });
+
+    document.getElementById('new-prod-name').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') document.getElementById('add-prod-btn').click();
+    });
+
+    document.getElementById('download-btn').addEventListener('click', downloadCopyWithProducts);
+  }
+
+  // ---------- Mode switching ----------
+  var btnCalc = document.getElementById('btn-calc');
+  var btnManage = document.getElementById('btn-manage');
+  var viewCalc = document.getElementById('view-calc');
+  var viewManage = document.getElementById('view-manage');
+
+  btnCalc.addEventListener('click', function () {
+    btnCalc.classList.add('active');
+    btnManage.classList.remove('active');
+    viewCalc.classList.add('active');
+    viewManage.classList.remove('active');
+    renderCalc();
+    renderTotal();
+  });
+
+  btnManage.addEventListener('click', function () {
+    btnManage.classList.add('active');
+    btnCalc.classList.remove('active');
+    viewManage.classList.add('active');
+    viewCalc.classList.remove('active');
+    renderManage();
+  });
+
+  load();
+  renderCalc();
+  renderTotal();
+})();
+</script>
+
+</body>
+</html>

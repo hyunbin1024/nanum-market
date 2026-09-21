@@ -6,10 +6,10 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Price It Out">
+<meta name="apple-mobile-web-app-title" content="Nanum Market Calculator">
 <meta name="theme-color" content="#F6F5F1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#17181A" media="(prefers-color-scheme: dark)">
-<title>Price It Out</title>
+<title>Nanum Market Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -720,6 +720,20 @@
     outline: 2px solid var(--accent);
     outline-offset: -1px;
   }
+  .final-price {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    min-width: 76px;
+    text-align: right;
+    flex: 0 0 auto;
+  }
+  .final-price-muted {
+    color: var(--ink-soft);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+  }
   .product-list-row button.remove-btn {
     border: none;
     background: none;
@@ -762,7 +776,7 @@
 <body>
 
 <header>
-  <h1>Price It Out</h1>
+  <h1>Nanum Market Calculator</h1>
   <div class="mode-switch">
     <button id="btn-calc" class="active">Calculator</button>
     <button id="btn-manage">Manage products</button>
@@ -1236,11 +1250,16 @@
       var productsInCat = state.products.filter(function (p) { return p.category === cat; });
       var rowsHtml = productsInCat.length > 0
         ? productsInCat.map(function (p) {
-            var rateVal = (typeof p.discountRate === 'number' && p.discountRate > 0) ? p.discountRate : '';
+            var rate = productDiscountRate(p);
+            var rateVal = rate > 0 ? rate : '';
+            var finalPriceHtml = rate > 0
+              ? '<span class="final-price">\u2192 ' + fmt(p.price * (1 - rate / 100)) + '</span>'
+              : '<span class="final-price final-price-muted">no discount</span>';
             return '<div class="product-list-row">' +
               '<span class="pname">' + escapeHtml(p.name) + '</span>' +
               '<div class="price-field"><span class="price-currency">$</span><input type="text" inputmode="decimal" class="price-input" data-id="' + p.id + '" value="' + p.price.toFixed(2) + '"></div>' +
               '<div class="discount-rate-field"><input type="text" inputmode="decimal" class="discount-rate-input" placeholder="0" data-id="' + p.id + '" value="' + rateVal + '"><span class="price-currency">% off</span></div>' +
+              finalPriceHtml +
               '<button class="remove-btn" data-id="' + p.id + '">Remove</button>' +
               '</div>';
           }).join('')
@@ -1302,6 +1321,24 @@
       });
     });
 
+    // Updates just the "→ $X.XX" display in a product row after its
+    // price or discount rate changes, without re-rendering the whole
+    // Manage products page (which would disrupt whatever else the
+    // person is doing on the page).
+    function refreshRowFinalPrice(inputEl, product) {
+      var row = inputEl.closest('.product-list-row');
+      var span = row && row.querySelector('.final-price');
+      if (!span) return;
+      var rate = productDiscountRate(product);
+      if (rate > 0) {
+        span.className = 'final-price';
+        span.textContent = '\u2192 ' + fmt(product.price * (1 - rate / 100));
+      } else {
+        span.className = 'final-price final-price-muted';
+        span.textContent = 'no discount';
+      }
+    }
+
     manageEl.querySelectorAll('.price-input').forEach(function (input) {
       function applyPrice() {
         var id = input.getAttribute('data-id');
@@ -1319,6 +1356,7 @@
         product.price = v;
         persist();
         input.value = product.price.toFixed(2);
+        refreshRowFinalPrice(input, product);
         renderCalc();
         renderTotal();
       }
@@ -1354,6 +1392,7 @@
           input.value = product.discountRate;
         }
         persist();
+        refreshRowFinalPrice(input, product);
         renderCalc();
         renderTotal();
       }

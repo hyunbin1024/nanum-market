@@ -534,17 +534,6 @@
     border-radius: var(--radius-m);
     background: var(--surface);
   }
-  .lock-btn {
-    border: none;
-    background: none;
-    color: var(--ink-soft);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 4px 6px;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-  }
   .admin-lock {
     flex: 1 1 auto;
     display: flex;
@@ -567,32 +556,22 @@
     font-weight: 800;
     margin: 0 0 6px;
   }
-  .admin-lock-card input {
+  .admin-danger-zone {
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .btn-danger {
     width: 100%;
-    border: 1px solid var(--border);
-    background: var(--surface-sunken);
-    color: var(--ink);
-    border-radius: var(--radius-s);
-    padding: 11px 12px;
-    font-size: 15px;
-    text-align: center;
-    margin: 14px 0 10px;
-    letter-spacing: 0.1em;
-  }
-  .admin-lock-card input:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: -1px;
-  }
-  .admin-lock-card .btn-primary {
-    width: 100%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-  }
-  .admin-lock-error {
+    border: 1px solid var(--danger);
+    background: transparent;
     color: var(--danger);
-    font-size: 13px;
-    margin: 10px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
   }
   .manage-toolbar .status {
     font-size: 13px;
@@ -881,30 +860,55 @@
 
 <div class="total-bar" id="total-bar"></div>
 
-<script type="application/json" id="embedded-catalog">{"categories":["Food","Vegetable","Women","Men","Kids"],"products":[{"id":"p1","name":"Rice (5kg)","price":12.00,"category":"Food"},{"id":"p2","name":"Cooking Oil (1L)","price":6.50,"category":"Food"},{"id":"p3","name":"Instant Noodles","price":1.50,"category":"Food"},{"id":"p4","name":"Tomatoes (1kg)","price":2.00,"category":"Vegetable"},{"id":"p5","name":"Onions (1kg)","price":1.50,"category":"Vegetable"},{"id":"p6","name":"Potatoes (1kg)","price":1.80,"category":"Vegetable"},{"id":"p7","name":"Women's T-Shirt","price":8.00,"category":"Women"},{"id":"p8","name":"Women's Dress","price":15.00,"category":"Women"},{"id":"p9","name":"Women's Scarf","price":5.00,"category":"Women"},{"id":"p10","name":"Men's T-Shirt","price":8.00,"category":"Men"},{"id":"p11","name":"Men's Jeans","price":20.00,"category":"Men"},{"id":"p12","name":"Men's Belt","price":6.00,"category":"Men"},{"id":"p13","name":"Kids T-Shirt","price":5.00,"category":"Kids"},{"id":"p14","name":"Kids Shorts","price":6.00,"category":"Kids"},{"id":"p15","name":"Kids Socks","price":2.00,"category":"Kids"}]}</script>
+<script type="application/json" id="embedded-catalog">{"categories":["Adult/Kids Clothes","Food","Vegetable","베이커리","민들레"],"products":[{"id":"p1","name":"$5 Clothes","price":5,"category":"Adult/Kids Clothes"},{"id":"p2","name":"$10 Clothes","price":10,"category":"Adult/Kids Clothes"},{"id":"p3","name":"$15 Clothes","price":15,"category":"Adult/Kids Clothes"},{"id":"p4","name":"$20 Clothes","price":20,"category":"Adult/Kids Clothes"},{"id":"p5","name":"$30 Clothes","price":30,"category":"Adult/Kids Clothes"},{"id":"p6","name":"$40 Clothes","price":40,"category":"Adult/Kids Clothes"},{"id":"p7","name":"$50 Clothes","price":50,"category":"Adult/Kids Clothes"},{"id":"p8","name":"떡갈비","price":15,"category":"Food"},{"id":"p9","name":"닭갈비","price":35,"category":"Food"},{"id":"p10","name":"닭강정","price":10,"category":"Food"},{"id":"p11","name":"우동","price":5,"category":"Food"},{"id":"p12","name":"오뎅 x1","price":3,"category":"Food"},{"id":"p13","name":"오뎅 x2","price":5,"category":"Food"},{"id":"p14","name":"순대","price":8,"category":"Food"},{"id":"p15","name":"떡볶이","price":10,"category":"Food"},{"id":"p16","name":"소떡소떡","price":5,"category":"Food"},{"id":"p17","name":"김치","price":15,"category":"Food"},{"id":"p18","name":"족발","price":15,"category":"Food"},{"id":"p19","name":"배추","price":5.99,"category":"Vegetable"},{"id":"p20","name":"무","price":2.99,"category":"Vegetable"},{"id":"p21","name":"대파","price":1.99,"category":"Vegetable"},{"id":"p22","name":"피망","price":1.99,"category":"Vegetable"},{"id":"p23","name":"골드 고구마","price":5.99,"category":"Vegetable"},{"id":"p24","name":"양배추","price":4.99,"category":"Vegetable"},{"id":"p25","name":"청경채","price":0.99,"category":"Vegetable"},{"id":"p26","name":"애호박","price":0.99,"category":"Vegetable"},{"id":"p27","name":"오이","price":2.99,"category":"Vegetable"},{"id":"p28","name":"달걀","price":22,"category":"Vegetable"},{"id":"p29","name":"두쫀쿠","price":5,"category":"베이커리"},{"id":"p30","name":"버터떡 x2","price":5,"category":"베이커리"},{"id":"p31","name":"피낭시에","price":4,"category":"베이커리"},{"id":"p32","name":"쿠키","price":6,"category":"베이커리"},{"id":"p33","name":"단호박 크림 치즈 빵","price":10,"category":"베이커리"},{"id":"p34","name":"바운시 캐슬","price":7,"category":"민들레"},{"id":"p35","name":"Matcha","price":6,"category":"민들레"},{"id":"p36","name":"Mocha","price":5.5,"category":"민들레"},{"id":"p37","name":"White/Hot Chocolate","price":5,"category":"민들레"},{"id":"p38","name":"Black","price":4.5,"category":"민들레"},{"id":"p39","name":"Alt Milk","price":0.5,"category":"민들레"},{"id":"p40","name":"Ice","price":1,"category":"민들레"},{"id":"p41","name":"Welches, Pocari","price":3,"category":"민들레"},{"id":"p42","name":"Other Cans","price":2,"category":"민들레"}]}</script>
 <script>
 (function () {
   var STORAGE_KEY = 'price-it-out-data-v1'; // saved only in this browser
-  var ADMIN_PASSWORD = '0926'; // client-side gate only — not real security, just keeps casual visitors out
-
   var DEFAULT_CATALOG = {
-    categories: ['Food', 'Vegetable', 'Women', 'Men', 'Kids'],
+    categories: ['Adult/Kids Clothes', 'Food', 'Vegetable', '베이커리', '민들레'],
     products: [
-      { id: 'p1', name: 'Rice (5kg)', price: 12.00, category: 'Food' },
-      { id: 'p2', name: 'Cooking Oil (1L)', price: 6.50, category: 'Food' },
-      { id: 'p3', name: 'Instant Noodles', price: 1.50, category: 'Food' },
-      { id: 'p4', name: 'Tomatoes (1kg)', price: 2.00, category: 'Vegetable' },
-      { id: 'p5', name: 'Onions (1kg)', price: 1.50, category: 'Vegetable' },
-      { id: 'p6', name: 'Potatoes (1kg)', price: 1.80, category: 'Vegetable' },
-      { id: 'p7', name: "Women's T-Shirt", price: 8.00, category: 'Women' },
-      { id: 'p8', name: "Women's Dress", price: 15.00, category: 'Women' },
-      { id: 'p9', name: "Women's Scarf", price: 5.00, category: 'Women' },
-      { id: 'p10', name: "Men's T-Shirt", price: 8.00, category: 'Men' },
-      { id: 'p11', name: "Men's Jeans", price: 20.00, category: 'Men' },
-      { id: 'p12', name: "Men's Belt", price: 6.00, category: 'Men' },
-      { id: 'p13', name: "Kids T-Shirt", price: 5.00, category: 'Kids' },
-      { id: 'p14', name: "Kids Shorts", price: 6.00, category: 'Kids' },
-      { id: 'p15', name: "Kids Socks", price: 2.00, category: 'Kids' }
+      { id: 'p1', name: '$5 Clothes', price: 5, category: 'Adult/Kids Clothes' },
+      { id: 'p2', name: '$10 Clothes', price: 10, category: 'Adult/Kids Clothes' },
+      { id: 'p3', name: '$15 Clothes', price: 15, category: 'Adult/Kids Clothes' },
+      { id: 'p4', name: '$20 Clothes', price: 20, category: 'Adult/Kids Clothes' },
+      { id: 'p5', name: '$30 Clothes', price: 30, category: 'Adult/Kids Clothes' },
+      { id: 'p6', name: '$40 Clothes', price: 40, category: 'Adult/Kids Clothes' },
+      { id: 'p7', name: '$50 Clothes', price: 50, category: 'Adult/Kids Clothes' },
+      { id: 'p8', name: '떡갈비', price: 15, category: 'Food' },
+      { id: 'p9', name: '닭갈비', price: 35, category: 'Food' },
+      { id: 'p10', name: '닭강정', price: 10, category: 'Food' },
+      { id: 'p11', name: '우동', price: 5, category: 'Food' },
+      { id: 'p12', name: '오뎅 x1', price: 3, category: 'Food' },
+      { id: 'p13', name: '오뎅 x2', price: 5, category: 'Food' },
+      { id: 'p14', name: '순대', price: 8, category: 'Food' },
+      { id: 'p15', name: '떡볶이', price: 10, category: 'Food' },
+      { id: 'p16', name: '소떡소떡', price: 5, category: 'Food' },
+      { id: 'p17', name: '김치', price: 15, category: 'Food' },
+      { id: 'p18', name: '족발', price: 15, category: 'Food' },
+      { id: 'p19', name: '배추', price: 5.99, category: 'Vegetable' },
+      { id: 'p20', name: '무', price: 2.99, category: 'Vegetable' },
+      { id: 'p21', name: '대파', price: 1.99, category: 'Vegetable' },
+      { id: 'p22', name: '피망', price: 1.99, category: 'Vegetable' },
+      { id: 'p23', name: '골드 고구마', price: 5.99, category: 'Vegetable' },
+      { id: 'p24', name: '양배추', price: 4.99, category: 'Vegetable' },
+      { id: 'p25', name: '청경채', price: 0.99, category: 'Vegetable' },
+      { id: 'p26', name: '애호박', price: 0.99, category: 'Vegetable' },
+      { id: 'p27', name: '오이', price: 2.99, category: 'Vegetable' },
+      { id: 'p28', name: '달걀', price: 22, category: 'Vegetable' },
+      { id: 'p29', name: '두쫀쿠', price: 5, category: '베이커리' },
+      { id: 'p30', name: '버터떡 x2', price: 5, category: '베이커리' },
+      { id: 'p31', name: '피낭시에', price: 4, category: '베이커리' },
+      { id: 'p32', name: '쿠키', price: 6, category: '베이커리' },
+      { id: 'p33', name: '단호박 크림 치즈 빵', price: 10, category: '베이커리' },
+      { id: 'p34', name: '바운시 캐슬', price: 7, category: '민들레' },
+      { id: 'p35', name: 'Matcha', price: 6, category: '민들레' },
+      { id: 'p36', name: 'Mocha', price: 5.5, category: '민들레' },
+      { id: 'p37', name: 'White/Hot Chocolate', price: 5, category: '민들레' },
+      { id: 'p38', name: 'Black', price: 4.5, category: '민들레' },
+      { id: 'p39', name: 'Alt Milk', price: 0.5, category: '민들레' },
+      { id: 'p40', name: 'Ice', price: 1, category: '민들레' },
+      { id: 'p41', name: 'Welches, Pocari', price: 3, category: '민들레' },
+      { id: 'p42', name: 'Other Cans', price: 2, category: '민들레' }
     ]
   };
 
@@ -917,9 +921,7 @@
     customCart: [], // one-off items added on the fly: { id, name, price, qty } — never persisted
     customItemPanelOpen: false,
     discount: 0, // checkout-level discount, as a plain percentage
-    itemsPanelOpen: true,
-
-    adminUnlocked: false // resets on reload — Admin tab always asks for the password again
+    itemsPanelOpen: true
   };
 
   // The catalog baked into this specific file (see the <script
@@ -940,27 +942,18 @@
     return null;
   }
 
-  function load() {
-    var data = getEmbeddedCatalog() || DEFAULT_CATALOG;
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        var parsed = JSON.parse(raw);
-        if (parsed && parsed.categories && parsed.products) {
-          data = parsed;
-        }
-      }
-    } catch (e) {
-      console.warn('Could not load saved data, starting fresh.', e);
-    }
-    // Reads a discount as a plain percentage number. Also accepts a
-    // { type, value } object (from a brief earlier version of this
-    // page) by just taking its value and treating it as a percent.
-    function readPercent(raw) {
-      var v = (raw && typeof raw === 'object') ? raw.value : raw;
-      return (typeof v === 'number' && v > 0) ? Math.min(100, v) : null;
-    }
+  // Reads a discount as a plain percentage number. Also accepts a
+  // { type, value } object (from a brief earlier version of this
+  // page) by just taking its value and treating it as a percent.
+  function readPercent(raw) {
+    var v = (raw && typeof raw === 'object') ? raw.value : raw;
+    return (typeof v === 'number' && v > 0) ? Math.min(100, v) : null;
+  }
 
+  // Puts a { categories, products, categoryDiscounts, discount }
+  // object into effect as the app's current state. Used both for the
+  // normal startup load and for the Admin "Reset to default" button.
+  function applyCatalogData(data) {
     state.categories = data.categories;
     state.products = data.products.map(function (p) {
       return { id: p.id, name: p.name, price: p.price, category: p.category, discountRate: readPercent(p.discountRate || p.discount) };
@@ -978,6 +971,41 @@
     // products and discount page — it auto-saves and reloads just
     // like the catalog itself, and travels along in a downloaded copy.
     state.discount = readPercent(data.discount) || 0;
+  }
+
+  function load() {
+    var data = getEmbeddedCatalog() || DEFAULT_CATALOG;
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.categories && parsed.products) {
+          data = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load saved data, starting fresh.', e);
+    }
+    applyCatalogData(data);
+  }
+
+  // Wipes whatever is saved on this device and puts the catalog baked
+  // into this file (see the embedded-catalog script tag) back in
+  // effect — the same starting point anyone opening a fresh copy of
+  // this file would see.
+  function resetToDefaultCatalog() {
+    // Clear this browser's saved data first, then read the catalog
+    // straight from what's built into this HTML file — not from
+    // whatever was cached here before.
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('Could not clear this browser\'s saved data.', e);
+    }
+    var data = getEmbeddedCatalog() || DEFAULT_CATALOG;
+    applyCatalogData(data);
+    state.selections = {};
+    state.customCart = [];
   }
 
   // Auto-saves the current catalog to this browser every time it
@@ -1006,18 +1034,20 @@
   // browser or on any device, with no import step needed.
   function downloadCopyWithProducts() {
     try {
-      var tag = document.getElementById('embedded-catalog');
-      if (tag) {
-        tag.textContent = JSON.stringify({
+      // Work on a detached copy of the page — never the live document —
+      // so this can't disturb what this page itself considers its
+      // original defaults (which "Reset to default" relies on staying
+      // untouched for as long as this page is open).
+      var clone = document.documentElement.cloneNode(true);
+      var cloneTag = clone.querySelector('#embedded-catalog');
+      if (cloneTag) {
+        cloneTag.textContent = JSON.stringify({
           categories: state.categories,
           products: state.products,
           categoryDiscounts: state.categoryDiscounts,
           discount: state.discount
         });
       }
-      // Work on a detached copy of the page so the export always opens
-      // on the Calculator tab, no matter which tab is open right now.
-      var clone = document.documentElement.cloneNode(true);
       [['btn-calc', 'view-calc'], ['btn-manage', 'view-manage'], ['btn-admin', 'view-admin']].forEach(function (pair) {
         var btnEl = clone.querySelector('#' + pair[0]);
         var viewEl = clone.querySelector('#' + pair[1]);
@@ -1761,62 +1791,33 @@
     });
   }
 
-  // ---------- Admin view (password-protected) ----------
+  // ---------- Admin view (open — no password) ----------
   var adminEl = document.getElementById('view-admin');
 
   function renderAdmin() {
-    if (!state.adminUnlocked) {
-      renderAdminLock();
-    } else {
-      renderAdminContent();
-    }
-  }
-
-  function renderAdminLock(showError) {
-    adminEl.innerHTML =
-      '<div class="admin-lock">' +
-        '<div class="admin-lock-card">' +
-          '<h2>Admin access</h2>' +
-          '<p class="hint" style="margin-bottom:0;">Enter the password to continue.</p>' +
-          '<input type="password" inputmode="numeric" id="admin-password" placeholder="Password" autocomplete="off">' +
-          '<button class="btn-primary" id="admin-unlock-btn">Unlock</button>' +
-          (showError ? '<p class="admin-lock-error">Incorrect password.</p>' : '') +
-        '</div>' +
-      '</div>';
-
-    var pwInput = document.getElementById('admin-password');
-
-    function tryUnlock() {
-      if (pwInput.value === ADMIN_PASSWORD) {
-        state.adminUnlocked = true;
-        renderAdmin();
-      } else {
-        renderAdminLock(true);
-      }
-    }
-
-    document.getElementById('admin-unlock-btn').addEventListener('click', tryUnlock);
-    pwInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') tryUnlock();
-    });
-    pwInput.focus();
-  }
-
-  function renderAdminContent() {
     adminEl.innerHTML =
       '<div class="admin-lock">' +
         '<div class="admin-lock-card" style="text-align:left;">' +
           '<h2 style="text-align:center; margin-bottom:14px;">Admin</h2>' +
           '<p class="hint">Saves today\'s product list — and the overall discount, if one is set — as a new copy of this file. Useful for moving it to another device or keeping a backup.</p>' +
-          '<button class="btn-save" id="download-btn" style="width:100%; display:flex; justify-content:center; margin-bottom:12px;">Download copy with these products</button>' +
-          '<div style="text-align:center;"><button class="lock-btn" id="admin-lock-btn">Lock this page</button></div>' +
+          '<button class="btn-save" id="download-btn" style="width:100%; display:flex; justify-content:center; margin-bottom:18px;">Download copy with these products</button>' +
+          '<div class="admin-danger-zone">' +
+            '<p class="hint" style="margin-bottom:10px;">Erases everything saved on this device — categories, products, prices, and discounts — and puts back the original list built into this file.</p>' +
+            '<button class="btn-danger" id="reset-default-btn">Refresh Product List</button>' +
+          '</div>' +
         '</div>' +
       '</div>';
 
     document.getElementById('download-btn').addEventListener('click', downloadCopyWithProducts);
-    document.getElementById('admin-lock-btn').addEventListener('click', function () {
-      state.adminUnlocked = false;
+
+    document.getElementById('reset-default-btn').addEventListener('click', function () {
+      var ok = window.confirm('Reset the product list to the default that\'s built into this file? This erases everything saved on this device — categories, products, prices, and discounts — and cannot be undone.');
+      if (!ok) return;
+      resetToDefaultCatalog();
       renderAdmin();
+      renderManage();
+      renderCalc();
+      renderTotal();
     });
   }
 
